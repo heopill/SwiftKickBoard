@@ -84,7 +84,7 @@ class LoginViewController: UIViewController {
                                            attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])
         button.setAttributedTitle(attribute, for: .normal)
         button.titleLabel?.font = Nanum.light(12)
-        button.setTitleColor(.gray, for: .normal)
+        button.setTitleColor(UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1), for: .normal)
         button.addTarget(self, action: #selector(findPWButtonTapped), for: .touchUpInside)
         
         return button
