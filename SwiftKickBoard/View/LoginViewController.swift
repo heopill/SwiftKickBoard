@@ -41,7 +41,7 @@ class LoginViewController: UIViewController {
     private let idTextField: UITextField = {
         let tf = UITextField()
         let underLine = UIView()
-        underLine.backgroundColor = .black
+        underLine.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
         
         tf.addSubview(underLine)
         underLine.snp.makeConstraints {
@@ -55,7 +55,7 @@ class LoginViewController: UIViewController {
     private let pwTextField: UITextField = {
         let tf = UITextField()
         let underLine = UIView()
-        underLine.backgroundColor = .black
+        underLine.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
         
         tf.addSubview(underLine)
         underLine.snp.makeConstraints {
@@ -84,7 +84,7 @@ class LoginViewController: UIViewController {
                                            attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])
         button.setAttributedTitle(attribute, for: .normal)
         button.titleLabel?.font = Nanum.light(12)
-        button.setTitleColor(.gray, for: .normal)
+        button.setTitleColor(UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1), for: .normal)
         button.addTarget(self, action: #selector(findPWButtonTapped), for: .touchUpInside)
         
         return button
@@ -130,7 +130,7 @@ class LoginViewController: UIViewController {
         let label = UILabel()
         label.text = "간편로그인"
         label.font = Nanum.light(12)
-        label.textColor = .lightGray
+        label.textColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
         label.backgroundColor = .white
         label.textAlignment = .center
         
@@ -139,7 +139,7 @@ class LoginViewController: UIViewController {
     
     private let separateView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
         
         return view
     }()

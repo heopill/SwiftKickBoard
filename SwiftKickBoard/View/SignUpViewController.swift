@@ -59,7 +59,7 @@ class SignUpViewController: UIViewController {
     private let nameTextField: UITextField = {
         let tf = UITextField()
         let underLine = UIView()
-        underLine.backgroundColor = .black
+        underLine.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
 
         tf.addSubview(underLine)
         underLine.snp.makeConstraints {
@@ -75,7 +75,7 @@ class SignUpViewController: UIViewController {
     private let idTextField: UITextField = {
         let tf = UITextField()
         let underLine = UIView()
-        underLine.backgroundColor = .black
+        underLine.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
 
         tf.addSubview(underLine)
         underLine.snp.makeConstraints {
@@ -91,7 +91,7 @@ class SignUpViewController: UIViewController {
     private let pwTextField: UITextField = {
         let tf = UITextField()
         let underLine = UIView()
-        underLine.backgroundColor = .black
+        underLine.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
 
         tf.addSubview(underLine)
         underLine.snp.makeConstraints {
@@ -107,7 +107,7 @@ class SignUpViewController: UIViewController {
     private let pwTextField2: UITextField = {
         let tf = UITextField()
         let underLine = UIView()
-        underLine.backgroundColor = .black
+        underLine.backgroundColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
 
         tf.addSubview(underLine)
         underLine.snp.makeConstraints {
