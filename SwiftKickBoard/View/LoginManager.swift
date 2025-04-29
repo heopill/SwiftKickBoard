@@ -22,7 +22,7 @@ class LoginManager {
     }
     
     func login(id: String, pw: String) -> Bool {
-        var data = user
+        let data = user
         
         for i in data {
             if i[1] == id, i[2] == pw {

@@ -65,6 +65,8 @@ class LoginViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.isSecureTextEntry = true
+        
         return tf
     }()
     
