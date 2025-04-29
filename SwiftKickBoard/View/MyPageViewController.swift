@@ -24,6 +24,7 @@ class MyPageViewController: UIViewController {
         let label = UILabel()
         label.font = Nanum.bold(36)
         label.textColor = .black
+        label.text = "홍길동"
         
         return label
     }()
@@ -41,6 +42,7 @@ class MyPageViewController: UIViewController {
         let label = UILabel()
         label.font = Nanum.light(20)
         label.textColor = .black
+        label.text = "abc0000"
         
         return label
     }()
@@ -50,7 +52,8 @@ class MyPageViewController: UIViewController {
         let attribute = NSAttributedString(string: "로그아웃",
                                            attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue])
         button.setAttributedTitle(attribute, for: .normal)
-        button.titleLabel?.font = Nanum.bold(14)
+        button.titleLabel?.font = Nanum.bold(16)
+        button.titleLabel?.textColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
         
         return button
     }()
@@ -60,24 +63,7 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = .black
         table.delegate = self
         table.dataSource = self
-        
-        let header = UIView()
-        let defaultTextLabel = UILabel()
-        defaultTextLabel.textColor = .white
-        defaultTextLabel.font = Nanum.light(18)
-        
-        let attribute = NSMutableAttributedString(string: "현재 SWIFT를")
-        attribute.addAttributes([.font: Nanum.bold(24) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
-        
-        defaultTextLabel.attributedText = attribute
-        
-        header.addSubview(defaultTextLabel)
-        defaultTextLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(20)
-        }
-        
-        table.tableHeaderView = header
+        table.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.id)
         
         return table
     }()
@@ -102,28 +88,110 @@ extension MyPageViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        view.addSubview(mainTableView)
+        [titleLabel, nameLabel, helloLabel, idLabel, logoutButton, mainTableView]
+            .forEach { view.addSubview($0) }
         
         mainTableView.snp.makeConstraints {
-            $0.height.equalTo(300)
-            $0.center.equalToSuperview()
+            $0.height.equalTo(260)
+            $0.centerY.equalToSuperview().offset(-46)
             $0.leading.trailing.equalToSuperview()
+        }
+        
+        idLabel.snp.makeConstraints {
+            $0.bottom.equalTo(mainTableView.snp.top).offset(-12)
+            $0.leading.equalToSuperview().inset(24)
+        }
+        
+        logoutButton.snp.makeConstraints {
+            $0.bottom.equalTo(idLabel)
+            $0.trailing.equalToSuperview().inset(8)
+        }
+        
+        nameLabel.snp.makeConstraints {
+            $0.bottom.equalTo(idLabel.snp.top).offset(-8)
+            $0.leading.equalToSuperview().inset(24)
+        }
+        
+        helloLabel.snp.makeConstraints {
+            $0.leading.equalTo(nameLabel.snp.trailing)
+            $0.bottom.equalTo(nameLabel)
+        }
+        
+        titleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(60)
         }
     }
     
 }
 
 extension MyPageViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UIView()
+        let defaultTextLabel = UILabel()
+        let stateTextLabel = UILabel()
+        
+        defaultTextLabel.textColor = .white
+        defaultTextLabel.font = Nanum.bold(22)
+        
+        let attribute = NSMutableAttributedString(string: "현재 SWIFT를")
+        attribute.addAttributes([.font: Nanum.bold(34) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
+        attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
+        
+        defaultTextLabel.attributedText = attribute
+        
+        stateTextLabel.textColor = .main
+        stateTextLabel.font = Nanum.bold(22)
+        stateTextLabel.text = "이용 중"
+        
+        header.addSubview(defaultTextLabel)
+        header.addSubview(stateTextLabel)
+        
+        defaultTextLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(20)
+        }
+        
+        stateTextLabel.snp.makeConstraints {
+            $0.bottom.equalTo(defaultTextLabel.snp.bottom)
+            $0.leading.equalTo(defaultTextLabel.snp.trailing).offset(8)
+        }
+        
+        return header
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        let height = tableView.frame.height / 4
+        return height
+    }
     
 }
 
 extension MyPageViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        guard let cell = mainTableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
+        
+        if indexPath.row == 0 {
+            cell.titleIcon.image = UIImage(named: "kickboard")
+            cell.titleLabel.text = "등록한 킥보드"
+            cell.countLabel.text = "~개"
+        
+        } else if indexPath.row == 1 {
+            cell.titleIcon.image = UIImage(named: "history")
+            cell.titleLabel.text = "이용내역"
+            cell.countLabel.text = "~건"
+            
+        }
+        
+        return cell
     }
     
     
