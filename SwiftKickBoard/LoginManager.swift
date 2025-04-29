@@ -29,16 +29,16 @@ class LoginManager {
 
 // MARK: - Method
 extension LoginManager {
-    func login(id: String, pw: String) -> Bool {
+    func login(id: String, pw: String) -> [String]? {
         let data = user
         
         for i in data {
             if i[1] == id, i[2] == pw {
-                return true
+                return i
             }
         }
         
-        return false
+        return nil
     }
     
     func signUp(name: String, id: String, pw: String, on vc: UIViewController) -> Bool {

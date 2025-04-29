@@ -12,7 +12,6 @@ import SnapKit
 class LoginViewController: UIViewController {
     
     private let login = LoginManager()
-    private var autoLogin = false
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -180,7 +179,7 @@ extension LoginViewController {
         if UserDefaults.standard.bool(forKey: "autoLogin") {
             guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
             
-            if login.login(id: lastID[0], pw: lastID[1]) {
+            if login.login(id: lastID[1], pw: lastID[2]) != nil {
                 self.navigationController?.pushViewController(MainViewController(), animated: true)
             }
         }
@@ -270,7 +269,6 @@ extension LoginViewController {
     
     @objc func autoLoginButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
-        autoLogin.toggle()
     }
     
     @objc func findPWButtonTapped(_ sender: UIButton) {
@@ -302,12 +300,15 @@ extension LoginViewController {
     // Login 버튼 클릭
     @objc func loginButtonTapped(_ sender: UIButton) {
         
-        if login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
+        if let info = login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
             
-            if autoLogin {
+            if autoLoginButton.isSelected {
                 UserDefaults.standard.set(true, forKey: "autoLogin")
-                UserDefaults.standard.set([idTextField.text, pwTextField.text], forKey: "lastID")
+            } else {
+                UserDefaults.standard.set(false, forKey: "autoLogin")
             }
+            
+            UserDefaults.standard.set(info, forKey: "lastID")
             
             let alert = UIAlertController(title: "알림🔔", message: "로그인 성공!", preferredStyle: .alert)
             
