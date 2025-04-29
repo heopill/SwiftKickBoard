@@ -180,7 +180,7 @@ extension LoginViewController {
             guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
             
             if login.login(id: lastID[1], pw: lastID[2]) != nil {
-                self.navigationController?.pushViewController(MainViewController(), animated: true)
+                self.navigationController?.pushViewController(MyPageViewController(), animated: true)
             }
         }
         
@@ -267,11 +267,11 @@ extension LoginViewController {
         }
     }
     
-    @objc func autoLoginButtonTapped(_ sender: UIButton) {
+    @objc private func autoLoginButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
     }
     
-    @objc func findPWButtonTapped(_ sender: UIButton) {
+    @objc private func findPWButtonTapped(_ sender: UIButton) {
         let alert = UIAlertController(title: "비밀번호 찾기", message: "이름과 아이디를 입력해주세요.", preferredStyle: .alert)
         
         alert.addTextField { textField in
@@ -298,7 +298,7 @@ extension LoginViewController {
     }
     
     // Login 버튼 클릭
-    @objc func loginButtonTapped(_ sender: UIButton) {
+    @objc private func loginButtonTapped(_ sender: UIButton) {
         
         if let info = login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
             
@@ -316,7 +316,7 @@ extension LoginViewController {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                 alert.dismiss(animated: true)
-                self.navigationController?.pushViewController(MainViewController(), animated: true)
+                self.navigationController?.pushViewController(MyPageViewController(), animated: true)
             }
             
         } else {
@@ -331,7 +331,7 @@ extension LoginViewController {
         }
     }
     
-    @objc func findIDButtonTapped(_ sender: UIButton) {
+    @objc private func findIDButtonTapped(_ sender: UIButton) {
         let alert = UIAlertController(title: "아이디 찾기", message: "이름을 입력해주세요.", preferredStyle: .alert)
         
         alert.addTextField { textField in
@@ -350,11 +350,11 @@ extension LoginViewController {
         present(alert, animated: true)
     }
     
-    @objc func signUpButtonTapped(_ sender: UIButton) {
+    @objc private func signUpButtonTapped(_ sender: UIButton) {
         self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
-    @objc func eazyLoginButtonTapped(_ sender: UIButton) {
+    @objc private func eazyLoginButtonTapped(_ sender: UIButton) {
         let alert = UIAlertController(title: "안내🔔", message: "해당 기능은 구현 예정입니다.", preferredStyle: .alert)
         
         present(alert, animated: true)

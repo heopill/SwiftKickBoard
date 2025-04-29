@@ -56,6 +56,7 @@ class MyPageViewController: UIViewController {
         button.setAttributedTitle(attribute, for: .normal)
         button.titleLabel?.font = Nanum.bold(16)
         button.titleLabel?.textColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
+        button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -89,14 +90,28 @@ extension MyPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        guard let myInfo = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
+        nameLabel.text = myInfo[0]
+        idLabel.text = myInfo[1]
+        
         setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
     }
     
 }
 
 // MARK: - Method
 extension MyPageViewController {
+    
+    @objc private func logoutButtonTapped(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+        UserDefaults.standard.set(false, forKey: "autoLogin")
+    }
     
     private func setupUI() {
         view.backgroundColor = .white
