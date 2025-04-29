@@ -183,7 +183,12 @@ extension LoginViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        [titleLabel, idLabel, pwLabel, idTextField, pwTextField, autoLoginButton, findPWButton, signUpButton, findIDButton, loginButton, separateView, eazyLoginLabel, eazyLoginButtonStackView]
+        let stackView = UIStackView(arrangedSubviews: [signUpButton, findIDButton])
+        stackView.axis = .horizontal
+        stackView.spacing = 60
+        view.addSubview(stackView)
+        
+        [titleLabel, idLabel, pwLabel, idTextField, pwTextField, autoLoginButton, findPWButton, loginButton, separateView, eazyLoginLabel, eazyLoginButtonStackView]
             .forEach { view.addSubview($0) }
         
         pwTextField.snp.makeConstraints {
@@ -227,21 +232,6 @@ extension LoginViewController {
             $0.top.equalTo(pwTextField.snp.bottom).offset(56)
             $0.leading.trailing.equalToSuperview().inset(40)
         }
-        
-//        signUpButton.snp.makeConstraints {
-//            $0.top.equalTo(loginButton.snp.bottom).offset(16)
-//            $0.trailing.equalTo(view.snp.centerX).offset(-30)
-//        }
-//        
-//        findIDButton.snp.makeConstraints {
-//            $0.top.equalTo(signUpButton)
-//            $0.leading.equalTo(view.snp.centerX).offset(30)
-//        }
-        
-        let stackView = UIStackView(arrangedSubviews: [signUpButton, findIDButton])
-        stackView.axis = .horizontal
-        stackView.spacing = 60
-        view.addSubview(stackView)
         
         stackView.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(16)
