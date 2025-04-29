@@ -68,6 +68,17 @@ class MyPageViewController: UIViewController {
         return table
     }()
     
+    private lazy var detailTableView: UITableView = {
+        let table = UITableView()
+        table.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+        table.delegate = self
+        table.dataSource = self
+        table.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.id)
+        table.isHidden = true
+        
+        return table
+    }()
+    
 }
 
 // MARK: - Lifecycle
@@ -88,12 +99,18 @@ extension MyPageViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        [titleLabel, nameLabel, helloLabel, idLabel, logoutButton, mainTableView]
+        [titleLabel, nameLabel, helloLabel, idLabel, logoutButton, mainTableView, detailTableView]
             .forEach { view.addSubview($0) }
         
         mainTableView.snp.makeConstraints {
             $0.height.equalTo(260)
             $0.centerY.equalToSuperview().offset(-46)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        detailTableView.snp.makeConstraints {
+            $0.top.equalTo(mainTableView.snp.bottom)
+            $0.bottom.equalToSuperview().inset(110)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -121,73 +138,108 @@ extension MyPageViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(60)
         }
+        
     }
     
 }
 
 extension MyPageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = UIView()
-        let defaultTextLabel = UILabel()
-        let stateTextLabel = UILabel()
-        
-        defaultTextLabel.textColor = .white
-        defaultTextLabel.font = Nanum.bold(22)
-        
-        let attribute = NSMutableAttributedString(string: "현재 SWIFT를")
-        attribute.addAttributes([.font: Nanum.bold(34) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
-        attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
-        
-        defaultTextLabel.attributedText = attribute
-        
-        stateTextLabel.textColor = .main
-        stateTextLabel.font = Nanum.bold(22)
-        stateTextLabel.text = "이용 중"
-        
-        header.addSubview(defaultTextLabel)
-        header.addSubview(stateTextLabel)
-        
-        defaultTextLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(20)
+        if tableView == mainTableView {
+            let header = UIView()
+            let defaultTextLabel = UILabel()
+            let stateTextLabel = UILabel()
+            
+            defaultTextLabel.textColor = .white
+            defaultTextLabel.font = Nanum.bold(22)
+            
+            let attribute = NSMutableAttributedString(string: "현재 SWIFT를")
+            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
+            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
+            
+            defaultTextLabel.attributedText = attribute
+            
+            stateTextLabel.textColor = .main
+            stateTextLabel.font = Nanum.bold(22)
+            stateTextLabel.text = "이용 중"
+            
+            header.addSubview(defaultTextLabel)
+            header.addSubview(stateTextLabel)
+            
+            defaultTextLabel.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.equalToSuperview().inset(20)
+            }
+            
+            stateTextLabel.snp.makeConstraints {
+                $0.bottom.equalTo(defaultTextLabel.snp.bottom)
+                $0.leading.equalTo(defaultTextLabel.snp.trailing).offset(8)
+            }
+            
+            return header
+        } else {
+            return nil
         }
-        
-        stateTextLabel.snp.makeConstraints {
-            $0.bottom.equalTo(defaultTextLabel.snp.bottom)
-            $0.leading.equalTo(defaultTextLabel.snp.trailing).offset(8)
-        }
-        
-        return header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let height = tableView.frame.height / 4
-        return height
+        if tableView == mainTableView {
+            let height = tableView.frame.height / 4
+            return height
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == mainTableView {
+            if let cell = tableView.cellForRow(at: indexPath) as? MainTableViewCell {
+                tableView.visibleCells.forEach{ $0.contentView.backgroundColor = .black }
+                cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+            }
+            detailTableView.isHidden = false
+        }
     }
     
 }
 
 extension MyPageViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+        if tableView == mainTableView {
+            return 60
+        } else {
+            return 50
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if tableView == mainTableView {
+            return 2
+        } else {
+            return 10
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = mainTableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
         
-        if indexPath.row == 0 {
-            cell.titleIcon.image = UIImage(named: "kickboard")
-            cell.titleLabel.text = "등록한 킥보드"
-            cell.countLabel.text = "~개"
-        
-        } else if indexPath.row == 1 {
-            cell.titleIcon.image = UIImage(named: "history")
-            cell.titleLabel.text = "이용내역"
-            cell.countLabel.text = "~건"
+        if tableView == mainTableView {
+            cell.setupUIForMainTableView()
+            
+            if indexPath.row == 0 {
+                cell.titleIcon.image = UIImage(named: "kickboard")
+                cell.titleLabel.text = "등록한 킥보드"
+                cell.countLabel.text = "~개"
+                
+            } else if indexPath.row == 1 {
+                cell.titleIcon.image = UIImage(named: "history")
+                cell.titleLabel.text = "이용내역"
+                cell.countLabel.text = "~건"
+                
+            }
+            
+        } else {
+            cell.setupUIForDetailTableView()
             
         }
         

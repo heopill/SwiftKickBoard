@@ -22,7 +22,6 @@ class MainTableViewCell: UITableViewCell {
     let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = Nanum.bold(24)
         
         return label
     }()
@@ -30,9 +29,15 @@ class MainTableViewCell: UITableViewCell {
     let countLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = Nanum.light(20)
         
         return label
+    }()
+    
+    private let separaterView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        
+        return view
     }()
     
     private let clickIcon: UIImageView = {
@@ -45,11 +50,42 @@ class MainTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: MainTableViewCell.id)
-        setupUI()
     }
     
-    private func setupUI() {
+    override func prepareForReuse() {
+        titleIcon.image = nil
+        titleLabel.text = nil
+        countLabel.text = nil
+        clickIcon.image = nil
+    }
+    
+    func setupUIForDetailTableView() {
+        contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+        
+        [titleLabel, separaterView]
+            .forEach { contentView.addSubview($0) }
+        
+        titleLabel.font = Nanum.light(24)
+        titleLabel.text = "#0000"
+        
+        titleLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(20)
+        }
+        
+        separaterView.snp.makeConstraints {
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.bottom.equalToSuperview()
+        }
+        
+    }
+    
+    func setupUIForMainTableView() {
         contentView.backgroundColor = .black
+        
+        titleLabel.font = Nanum.bold(24)
+        countLabel.font = Nanum.light(20)
         
         [titleIcon, titleLabel, countLabel, clickIcon]
             .forEach { contentView.addSubview($0) }
