@@ -90,7 +90,9 @@ extension MyPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let myInfo = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
+        guard var myInfo = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
+        myInfo[0].removeFirst()
+        
         nameLabel.text = myInfo[0]
         idLabel.text = myInfo[1]
         
