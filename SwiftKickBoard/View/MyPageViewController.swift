@@ -167,6 +167,8 @@ extension MyPageViewController: UITableViewDelegate {
             let defaultTextLabel = UILabel()
             let stateTextLabel = UILabel()
             
+            header.backgroundColor = .black
+            
             defaultTextLabel.textColor = .white
             defaultTextLabel.font = Nanum.bold(22)
             
@@ -212,8 +214,13 @@ extension MyPageViewController: UITableViewDelegate {
         if tableView == mainTableView {
             selectedMainTableIndex = indexPath
             tableView.reloadData()
-            detailTableView.isHidden = false
+            
+            if detailTableView.isHidden {
+                detailTableView.isHidden = false
+            }
+            detailTableView.reloadData()
         }
+        
     }
     
 }
@@ -255,12 +262,24 @@ extension MyPageViewController: UITableViewDataSource {
             
             if indexPath == selectedMainTableIndex {
                 cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+                
             } else {
                 cell.contentView.backgroundColor = .black
+                
             }
             
         } else {
             cell.setupUIForDetailTableView()
+            
+            if let selectedMainTableIndex,
+               selectedMainTableIndex.row == 0 {
+                cell.titleLabel.text = "#0000"
+                
+            } else if let selectedMainTableIndex,
+                      selectedMainTableIndex.row == 1 {
+                cell.titleLabel.text = "25.04.29"
+                
+            }
             
         }
         

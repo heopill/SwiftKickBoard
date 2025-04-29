@@ -56,7 +56,6 @@ class MainTableViewCell: UITableViewCell {
         titleIcon.image = nil
         titleLabel.text = nil
         countLabel.text = nil
-        clickIcon.image = nil
     }
     
     func setupUIForDetailTableView() {
@@ -66,7 +65,6 @@ class MainTableViewCell: UITableViewCell {
             .forEach { contentView.addSubview($0) }
         
         titleLabel.font = Nanum.light(24)
-        titleLabel.text = "#0000"
         
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
