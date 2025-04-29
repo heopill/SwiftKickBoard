@@ -11,6 +11,8 @@ import SnapKit
 // MARK: - SignUpViewController
 class SignUpViewController: UIViewController {
     
+    private let login = LoginManager()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "회원가입"
@@ -99,6 +101,8 @@ class SignUpViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.isSecureTextEntry = true
+        
         tf.snp.makeConstraints { $0.height.equalTo(30) }
 
         return tf
@@ -114,6 +118,8 @@ class SignUpViewController: UIViewController {
             $0.height.equalTo(0.5)
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
+        
+        tf.isSecureTextEntry = true
         
         tf.snp.makeConstraints { $0.height.equalTo(30) }
 
@@ -185,6 +191,44 @@ extension SignUpViewController {
     }
     
     @objc func signUpButtonTapped(_ sender: UIButton) {
+        guard let nameText = nameTextField.text,
+        let idText = idTextField.text,
+        let pwText = pwTextField.text,
+        let pw2Text = pwTextField2.text else { return }
+        
+        var message = ""
+        
+        if nameText.isEmpty {
+            message = "이름을 입력해주세요."
+        } else if idText.isEmpty {
+            message = "아이디를 입력해주세요."
+        } else if pwText.isEmpty || pw2Text.isEmpty {
+            message = "비밀번호를 입력해주세요."
+        } else if pwText != pw2Text {
+            message = "비밀번호 두개를 동일하게 입력해주세요."
+        }
+        
+        guard message.isEmpty else {
+            let alert = UIAlertController(title: "알림🔔", message: message, preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                alert.dismiss(animated: true)
+            }
+            return
+        }
+        
+        guard self.login.signUp(name: nameText, id: idText, pw: pwText, on: self) else { return }
+        
+        let alert = UIAlertController(title: "알림🔔", message: "회원가입을 성공적으로 완료했습니다.", preferredStyle: .alert)
+        
+        present(alert, animated: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            alert.dismiss(animated: true)
+            self.navigationController?.popViewController(animated: true)
+        }
         
     }
     

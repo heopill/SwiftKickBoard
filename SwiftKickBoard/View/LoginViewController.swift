@@ -11,6 +11,8 @@ import SnapKit
 // MARK: - LoginViewController
 class LoginViewController: UIViewController {
     
+    private let login = LoginManager()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "SWIFT"
@@ -62,6 +64,8 @@ class LoginViewController: UIViewController {
             $0.height.equalTo(0.5)
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
+        
+        tf.isSecureTextEntry = true
         
         return tf
     }()
@@ -172,6 +176,14 @@ extension LoginViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if UserDefaults.standard.bool(forKey: "autoLogin") {
+            guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
+            
+            if login.login(id: lastID[1], pw: lastID[2]) != nil {
+                self.navigationController?.pushViewController(MainViewController(), animated: true)
+            }
+        }
+        
         setupUI()
     }
     
@@ -183,7 +195,12 @@ extension LoginViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        [titleLabel, idLabel, pwLabel, idTextField, pwTextField, autoLoginButton, findPWButton, signUpButton, findIDButton, loginButton, separateView, eazyLoginLabel, eazyLoginButtonStackView]
+        let stackView = UIStackView(arrangedSubviews: [signUpButton, findIDButton])
+        stackView.axis = .horizontal
+        stackView.spacing = 60
+        view.addSubview(stackView)
+        
+        [titleLabel, idLabel, pwLabel, idTextField, pwTextField, autoLoginButton, findPWButton, loginButton, separateView, eazyLoginLabel, eazyLoginButtonStackView]
             .forEach { view.addSubview($0) }
         
         pwTextField.snp.makeConstraints {
@@ -228,21 +245,6 @@ extension LoginViewController {
             $0.leading.trailing.equalToSuperview().inset(40)
         }
         
-//        signUpButton.snp.makeConstraints {
-//            $0.top.equalTo(loginButton.snp.bottom).offset(16)
-//            $0.trailing.equalTo(view.snp.centerX).offset(-30)
-//        }
-//        
-//        findIDButton.snp.makeConstraints {
-//            $0.top.equalTo(signUpButton)
-//            $0.leading.equalTo(view.snp.centerX).offset(30)
-//        }
-        
-        let stackView = UIStackView(arrangedSubviews: [signUpButton, findIDButton])
-        stackView.axis = .horizontal
-        stackView.spacing = 60
-        view.addSubview(stackView)
-        
         stackView.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(16)
             $0.centerX.equalToSuperview()
@@ -270,23 +272,96 @@ extension LoginViewController {
     }
     
     @objc func findPWButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "비밀번호 찾기", message: "이름과 아이디를 입력해주세요.", preferredStyle: .alert)
         
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "ID"
+        }
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            guard let nameTextField = alert.textFields?[0],
+            let idTextField = alert.textFields?[1] else { return }
+            
+            guard let name = nameTextField.text,
+            let id = idTextField.text else { return }
+            
+            self.login.findPW(name: name, id: id, on: self)
+        })
+        
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
+    // Login 버튼 클릭
     @objc func loginButtonTapped(_ sender: UIButton) {
         
+        if let info = login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
+            
+            if autoLoginButton.isSelected {
+                UserDefaults.standard.set(true, forKey: "autoLogin")
+            } else {
+                UserDefaults.standard.set(false, forKey: "autoLogin")
+            }
+            
+            UserDefaults.standard.set(info, forKey: "lastID")
+            
+            let alert = UIAlertController(title: "알림🔔", message: "로그인 성공!", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                alert.dismiss(animated: true)
+                self.navigationController?.pushViewController(MainViewController(), animated: true)
+            }
+            
+        } else {
+            let alert = UIAlertController(title: "알림🔔", message: "ID 혹은 비밀번호가 일치하지 않습니다.", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                alert.dismiss(animated: true)
+            }
+            
+        }
     }
     
     @objc func findIDButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "아이디 찾기", message: "이름을 입력해주세요.", preferredStyle: .alert)
         
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+        }
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            guard let textField = alert.textFields?.first else { return }
+            guard let text = textField.text else { return }
+            
+            self.login.findID(name: text, on: self)
+        })
+        
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     @objc func signUpButtonTapped(_ sender: UIButton) {
-        
+        self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
     @objc func eazyLoginButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "안내🔔", message: "해당 기능은 구현 예정입니다.", preferredStyle: .alert)
         
+        present(alert, animated: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            alert.dismiss(animated: true)
+        }
     }
     
 }
