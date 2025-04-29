@@ -11,6 +11,8 @@ import SnapKit
 // MARK: - LoginViewController
 class LoginViewController: UIViewController {
     
+    private let login = LoginManager()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "SWIFT"
@@ -263,20 +265,55 @@ extension LoginViewController {
         
     }
     
+    // Login 버튼 클릭
     @objc func loginButtonTapped(_ sender: UIButton) {
         
+        if login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
+            self.navigationController?.pushViewController(MainViewController(), animated: true)
+            
+        } else {
+            let alert = UIAlertController(title: "알림🔔", message: "ID 혹은 비밀번호가 일치하지 않습니다.", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                alert.dismiss(animated: true)
+            }
+            
+        }
     }
     
     @objc func findIDButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "아이디 찾기", message: "이름을 입력해주세요.", preferredStyle: .alert)
         
+        alert.addTextField { textField in
+            textField.placeholder = "ID"
+        }
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            guard let textField = alert.textFields?.first else { return }
+            guard let text = textField.text else { return }
+            
+            self.login.findID(name: text, on: self)
+        })
+        
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     @objc func signUpButtonTapped(_ sender: UIButton) {
-        
+        self.navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
     
     @objc func eazyLoginButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "안내🔔", message: "해당 기능은 구현 예정입니다.", preferredStyle: .alert)
         
+        present(alert, animated: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            alert.dismiss(animated: true)
+        }
     }
     
 }
