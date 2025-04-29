@@ -11,6 +11,8 @@ import SnapKit
 // MARK: - MyPageViewController
 class MyPageViewController: UIViewController {
     
+    private var selectedMainTableIndex: IndexPath?
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "SWIFT"
@@ -193,10 +195,8 @@ extension MyPageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == mainTableView {
-            if let cell = tableView.cellForRow(at: indexPath) as? MainTableViewCell {
-                tableView.visibleCells.forEach{ $0.contentView.backgroundColor = .black }
-                cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
-            }
+            selectedMainTableIndex = indexPath
+            tableView.reloadData()
             detailTableView.isHidden = false
         }
     }
@@ -236,6 +236,12 @@ extension MyPageViewController: UITableViewDataSource {
                 cell.titleLabel.text = "이용내역"
                 cell.countLabel.text = "~건"
                 
+            }
+            
+            if indexPath == selectedMainTableIndex {
+                cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+            } else {
+                cell.contentView.backgroundColor = .black
             }
             
         } else {
