@@ -10,17 +10,25 @@ import UIKit
 
 class LoginManager {
     private let defaults = UserDefaults.standard
-    private let key = "user"
     
     private var user: [[String]] {
         get {
-            defaults.array(forKey: key) as? [[String]] ?? []
+            defaults.array(forKey: Key.user.rawValue) as? [[String]] ?? []
         }
         set {
-            defaults.set(newValue, forKey: key)
+            defaults.set(newValue, forKey: Key.user.rawValue)
         }
     }
     
+    private enum Key: String {
+        case user
+        case autoLogin
+        case lastID
+    }
+}
+
+// MARK: - Method
+extension LoginManager {
     func login(id: String, pw: String) -> Bool {
         let data = user
         

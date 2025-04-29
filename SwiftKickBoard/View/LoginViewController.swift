@@ -12,6 +12,7 @@ import SnapKit
 class LoginViewController: UIViewController {
     
     private let login = LoginManager()
+    private var autoLogin = false
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -176,6 +177,14 @@ extension LoginViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if UserDefaults.standard.bool(forKey: "autoLogin") {
+            guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
+            
+            if login.login(id: lastID[0], pw: lastID[1]) {
+                self.navigationController?.pushViewController(MainViewController(), animated: true)
+            }
+        }
+        
         setupUI()
     }
     
@@ -261,6 +270,7 @@ extension LoginViewController {
     
     @objc func autoLoginButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
+        autoLogin.toggle()
     }
     
     @objc func findPWButtonTapped(_ sender: UIButton) {
@@ -293,6 +303,11 @@ extension LoginViewController {
     @objc func loginButtonTapped(_ sender: UIButton) {
         
         if login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
+            
+            if autoLogin {
+                UserDefaults.standard.set(true, forKey: "autoLogin")
+                UserDefaults.standard.set([idTextField.text, pwTextField.text], forKey: "lastID")
+            }
             
             let alert = UIAlertController(title: "알림🔔", message: "로그인 성공!", preferredStyle: .alert)
             
