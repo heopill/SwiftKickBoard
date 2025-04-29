@@ -33,19 +33,26 @@ class LoginManager {
         return false
     }
     
-    func signUp(name: String, id: String, pw: String) {
+    func signUp(name: String, id: String, pw: String, on vc: UIViewController) -> Bool {
         var data = user
         
         for i in data {
             if i[1] == id {
-                print("해당 아이디로 가입된 계정이 있습니다.")
-                return
+                let alert = UIAlertController(title: "알림🔔", message: "해당 아이디로 가입된 계정이 있습니다.", preferredStyle: .alert)
+                
+                vc.present(alert, animated: true)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    alert.dismiss(animated: true)
+                }
+                
+                return false
             }
         }
         
         data.append([name, id, pw])
         user = data
-        
+        return true
     }
     
     func findID(name: String, on vc: UIViewController) {
@@ -74,7 +81,7 @@ class LoginManager {
         
         for i in data {
             if i[0] == name, i[1] == id {
-                info = "해당 정보의 비밀번호는 ( \(i[2]) )입니다."
+                info = "해당 아이디의 비밀번호는 ( \(i[2]) )입니다."
                 break
             }
         }

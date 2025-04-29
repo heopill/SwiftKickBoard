@@ -293,7 +293,15 @@ extension LoginViewController {
     @objc func loginButtonTapped(_ sender: UIButton) {
         
         if login.login(id: idTextField.text ?? "", pw: pwTextField.text ?? "") {
-            self.navigationController?.pushViewController(MainViewController(), animated: true)
+            
+            let alert = UIAlertController(title: "알림🔔", message: "로그인 성공!", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                alert.dismiss(animated: true)
+                self.navigationController?.pushViewController(MainViewController(), animated: true)
+            }
             
         } else {
             let alert = UIAlertController(title: "알림🔔", message: "ID 혹은 비밀번호가 일치하지 않습니다.", preferredStyle: .alert)
