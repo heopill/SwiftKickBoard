@@ -262,7 +262,29 @@ extension LoginViewController {
     }
     
     @objc func findPWButtonTapped(_ sender: UIButton) {
+        let alert = UIAlertController(title: "비밀번호 찾기", message: "이름과 아이디를 입력해주세요.", preferredStyle: .alert)
         
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+        }
+        
+        alert.addTextField { textField in
+            textField.placeholder = "ID"
+        }
+        
+        alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
+            guard let nameTextField = alert.textFields?[0],
+            let idTextField = alert.textFields?[1] else { return }
+            
+            guard let name = nameTextField.text,
+            let id = idTextField.text else { return }
+            
+            self.login.findPW(name: name, id: id, on: self)
+        })
+        
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     // Login 버튼 클릭
@@ -287,7 +309,7 @@ extension LoginViewController {
         let alert = UIAlertController(title: "아이디 찾기", message: "이름을 입력해주세요.", preferredStyle: .alert)
         
         alert.addTextField { textField in
-            textField.placeholder = "ID"
+            textField.placeholder = "Name"
         }
         
         alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
