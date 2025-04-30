@@ -183,7 +183,7 @@ extension LoginViewController {
             guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
             
             if login.login(id: lastID[1], pw: lastID[2]) != nil {
-                self.navigationController?.pushViewController(MainViewController(), animated: true)
+                self.navigationController?.pushViewController(TabBarController(), animated: true)
             }
         }
         
@@ -319,7 +319,7 @@ extension LoginViewController {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
                 alert.dismiss(animated: true)
-                self.navigationController?.pushViewController(MainViewController(), animated: true)
+                self.navigationController?.pushViewController(TabBarController(), animated: true)
             }
             
         } else {
