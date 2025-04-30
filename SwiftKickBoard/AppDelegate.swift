@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import NMapsMap
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
