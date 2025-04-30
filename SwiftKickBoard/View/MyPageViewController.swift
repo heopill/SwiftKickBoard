@@ -11,7 +11,7 @@ import SnapKit
 // MARK: - MyPageViewController
 class MyPageViewController: UIViewController {
     
-    private var selectedMainTableIndex: IndexPath?
+    var selectedMainTableIndex: IndexPath?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -212,12 +212,15 @@ extension MyPageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == mainTableView {
+            
+            if detailTableView.isHidden == true ||
+                selectedMainTableIndex == indexPath {
+                
+                detailTableView.isHidden.toggle()
+            }
+            
             selectedMainTableIndex = indexPath
             tableView.reloadData()
-            
-            if detailTableView.isHidden {
-                detailTableView.isHidden = false
-            }
             detailTableView.reloadData()
         }
         
@@ -246,19 +249,7 @@ extension MyPageViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
         
         if tableView == mainTableView {
-            cell.setupUIForMainTableView()
-            
-            if indexPath.row == 0 {
-                cell.titleIcon.image = UIImage(named: "kickboard")
-                cell.titleLabel.text = "등록한 킥보드"
-                cell.countLabel.text = "~개"
-                
-            } else if indexPath.row == 1 {
-                cell.titleIcon.image = UIImage(named: "history")
-                cell.titleLabel.text = "이용내역"
-                cell.countLabel.text = "~건"
-                
-            }
+            cell.mainTableViewCellDetail(indexPath: indexPath)
             
             if indexPath == selectedMainTableIndex {
                 cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)

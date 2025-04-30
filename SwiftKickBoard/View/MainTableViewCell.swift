@@ -79,6 +79,25 @@ class MainTableViewCell: UITableViewCell {
         
     }
     
+    func mainTableViewCellDetail(indexPath: IndexPath) {
+        let vc = MyPageViewController()
+        
+        self.setupUIForMainTableView()
+        
+        if indexPath.row == 0 {
+            self.titleIcon.image = UIImage(named: "kickboard")
+            self.titleLabel.text = "등록한 킥보드"
+            self.countLabel.text = "~개"
+            
+        } else if indexPath.row == 1 {
+            self.titleIcon.image = UIImage(named: "history")
+            self.titleLabel.text = "이용내역"
+            self.countLabel.text = "~건"
+            
+        }
+        
+    }
+    
     func setupUIForMainTableView() {
         contentView.backgroundColor = .black
         
