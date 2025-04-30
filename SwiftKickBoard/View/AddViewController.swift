@@ -7,8 +7,14 @@
 
 import UIKit
 import SnapKit
+import CoreData
+import NMapsMap
 
 class AddViewController: UIViewController {
+    
+    var container: NSPersistentContainer!
+    var kickBoardData: [KickBoardModel] = []
+    var coredata = CoreData.shared
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -18,9 +24,35 @@ class AddViewController: UIViewController {
         return label
     }()
     
-    private let mapView: UIView = {
-        let mapView = UIView()
-        mapView.backgroundColor = .cyan
+    lazy var mapView: NMFMapView = {
+        
+        let mapView = NMFMapView(frame: self.view.frame)
+        
+        let cameraPosition = NMFCameraPosition(
+            NMGLatLng(lat: 37.557116, lng: 126.924353), // 좌표
+            zoom: 15.0,    // 줌 레벨
+            tilt: 0.0,     // 기울기 (tilt)
+            heading: 0.0      // 방향 (bearing)
+        )
+        
+        let cameraUpdate = NMFCameraUpdate(position: cameraPosition)
+        mapView.moveCamera(cameraUpdate)
+        
+        //        let marker = NMFMarker()
+        //        marker.position = NMGLatLng(lat: 37.557175, lng: 126.924574)
+        //        marker.iconImage = NMFOverlayImage(name: "markerImage")
+        //        marker.mapView = mapView
+        //
+        //        let marker2 = NMFMarker()
+        //        marker2.position = NMGLatLng(lat: 37.556520, lng: 126.922885)
+        //        marker2.iconImage = NMFOverlayImage(name: "markerImage")
+        //        marker2.mapView = mapView
+        //
+        //        let marker3 = NMFMarker()
+        //        marker3.position = NMGLatLng(lat: 37.556154, lng: 126.925167)
+        //        marker3.iconImage = NMFOverlayImage(name: "markerImage")
+        //        marker3.mapView = mapView
+        
         return mapView
     }()
     
@@ -91,13 +123,19 @@ class AddViewController: UIViewController {
         button.backgroundColor = UIColor.main.withAlphaComponent(0.5)
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 15
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchDown)
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        readData()
+        displayKickBoardMarkers(on: mapView, with: kickBoardData)
     }
     
     private func configureUI() {
@@ -164,7 +202,43 @@ class AddViewController: UIViewController {
         }
     }
     
-   
+    @objc private func buttonTapped() {
+        print("등록하기 버튼 클릭")
+        guard let xText = xTextField.text, let x = Double(xText) else { return }
+        guard let yText = yTextField.text, let y = Double(yText) else { return }
+        
+        let nextId = (kickBoardData.map { $0.id }.max() ?? 0) + 1
+        
+        coredata.createData(id: nextId, lat: x, lon: y)
+        readData()
+        
+        displayKickBoardMarkers(on: mapView, with: kickBoardData)
+    }
+    
+    // 화면 아무곳이나 터치하면 키보드가 내려감
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.self.endEditing(true)
+    }
+    
+    // 지도에 마커를 추가하는 함수
+    private func displayKickBoardMarkers(on mapView: NMFMapView, with data: [KickBoardModel]) {
+        for kickBoard in data {
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: kickBoard.lat, lng: kickBoard.lon)
+            marker.iconImage = NMFOverlayImage(name: "markerImage")
+            marker.mapView = mapView
+        }
+    }
+    
+    private func readData() {
+        kickBoardData = []
+        let kickBoard = coredata.readAllData()
+        
+        for data in kickBoard {
+            kickBoardData.append(KickBoardModel(id: Int(data.id),lat: data.lat, lon: data.lon))
+        }
+        
+    }
     
 }
 

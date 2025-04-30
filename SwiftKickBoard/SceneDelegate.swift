@@ -18,6 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // window에게 루트 뷰 컨트롤러 지정. 네비게이션 컨트롤러를 사용. rootView는 ViewController()
         window.rootViewController = UINavigationController(rootViewController: MainViewController())
+
         
         // 이 메서드를 작성해줘야만 윈도우가 활성화가 됨
         window.makeKeyAndVisible()
