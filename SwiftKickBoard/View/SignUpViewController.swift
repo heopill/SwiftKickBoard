@@ -69,6 +69,7 @@ class SignUpViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.textColor = .black
         tf.snp.makeConstraints { $0.height.equalTo(30) }
 
         return tf
@@ -85,6 +86,7 @@ class SignUpViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.textColor = .black
         tf.snp.makeConstraints { $0.height.equalTo(30) }
 
         return tf
@@ -101,6 +103,7 @@ class SignUpViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.textColor = .black
         tf.isSecureTextEntry = true
         
         tf.snp.makeConstraints { $0.height.equalTo(30) }
@@ -119,6 +122,7 @@ class SignUpViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.textColor = .black
         tf.isSecureTextEntry = true
         
         tf.snp.makeConstraints { $0.height.equalTo(30) }
@@ -230,6 +234,10 @@ extension SignUpViewController {
             self.navigationController?.popViewController(animated: true)
         }
         
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      view.self.endEditing(true)
     }
     
 }
