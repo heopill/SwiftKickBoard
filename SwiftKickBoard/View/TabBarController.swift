@@ -18,7 +18,7 @@ class TabBarController: UIViewController {
     private let tabBar: UIView = {
         let view = UIView()
         view.backgroundColor = .black
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 42
         
         return view
     }()
@@ -59,6 +59,13 @@ extension TabBarController {
             item.tag = index
         }
         
+        setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
     }
 }
 
@@ -66,7 +73,27 @@ extension TabBarController {
 extension TabBarController {
     
     @objc private func tabBarButtonTapped(_ sender: UIButton) {
+        guard self.selectedIndex != sender.tag else { return }
+    }
+    
+    private func attchView(_ index: Int) {
+        tabBarItems[index].buttonIsSelected = true
         
+        let viewController = viewControllers[index]
+        viewController.view.frame = view.frame
+        viewController.didMove(toParent: self)
+        self.addChild(viewController)
+        self.view.addSubview(viewController.view)
+        self.view.bringSubviewToFront(tabBar)
+    }
+    
+    private func removeView(_ index: Int) {
+        tabBarItems[index].buttonIsSelected = false
+        
+        let viewController = viewControllers[index]
+        viewController.willMove(toParent: nil)
+        viewController.view.removeFromSuperview()
+        viewController.removeFromParent()
     }
     
     private func setupUI() {
@@ -78,8 +105,22 @@ extension TabBarController {
         tabBar.addSubview(myPageViewButton)
         
         tabBar.snp.makeConstraints {
-            $0.height.height.equalTo(40)
-            $0.leading.trailing.top.equalToSuperview().inset(20)
+            $0.height.height.equalTo(84)
+            $0.leading.trailing.bottom.equalToSuperview().inset(20)
+        }
+        
+        mainViewButton.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+        
+        addViewButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
+        }
+        
+        myPageViewButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
 }
