@@ -50,9 +50,9 @@ extension TabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let mainView = UINavigationController(rootViewController: MainViewController())
-        let addView = UINavigationController(rootViewController: AddViewController())
-        let myPageView = UINavigationController(rootViewController: MyPageViewController())
+        let mainView = MainViewController()
+        let addView = AddViewController()
+        let myPageView = MyPageViewController()
         
         self.viewControllers = [mainView, addView, myPageView]
         self.tabBarItems = [mainViewButton, addViewButton, myPageViewButton]

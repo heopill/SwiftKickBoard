@@ -109,11 +109,7 @@ extension MyPageViewController {
 extension MyPageViewController {
     
     @objc private func logoutButtonTapped(_ sender: UIButton) {
-        guard let window = self.view.window else { return }
-        
-        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
-            window.rootViewController = UINavigationController(rootViewController: LoginViewController())
-        }, completion: nil)
+        self.navigationController?.popViewController(animated: true)
         UserDefaults.standard.set(false, forKey: "autoLogin")
     }
     
