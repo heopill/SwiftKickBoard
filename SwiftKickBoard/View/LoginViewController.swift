@@ -154,8 +154,8 @@ class LoginViewController: UIViewController {
         let kakao = UIButton()
         
         apple.setImage(UIImage(named: "apple"), for: .normal)
-        google.setImage(UIImage(named: "google"), for: .normal)
-        kakao.setImage(UIImage(named: "kakao"), for: .normal)
+        google.setImage(UIImage(named: "Google"), for: .normal)
+        kakao.setImage(UIImage(named: "KAKAO"), for: .normal)
         [apple, google, kakao].forEach {
             $0.addTarget(self, action: #selector(eazyLoginButtonTapped), for: .touchUpInside)
         }
