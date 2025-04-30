@@ -58,7 +58,17 @@ class MainTableViewCell: UITableViewCell {
         countLabel.text = nil
     }
     
-    func setupUIForDetailTableView() {
+    func detailTableViewCellDetail(indexPath: IndexPath, selected: IndexPath?) {
+        if let selected, selected.row == 0 {
+            self.titleLabel.text = "#0000"
+            
+        } else if let selected, selected.row == 1 {
+            self.titleLabel.text = "25.04.29"
+            
+        }
+    }
+    
+    func setUpDetailTableViewCell() {
         contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
         
         [titleLabel, separaterView]
@@ -79,11 +89,7 @@ class MainTableViewCell: UITableViewCell {
         
     }
     
-    func mainTableViewCellDetail(indexPath: IndexPath) {
-        let vc = MyPageViewController()
-        
-        self.setupUIForMainTableView()
-        
+    func mainTableViewCellDetail(indexPath: IndexPath, selected: IndexPath?) {
         if indexPath.row == 0 {
             self.titleIcon.image = UIImage(named: "kickboard")
             self.titleLabel.text = "등록한 킥보드"
@@ -96,9 +102,17 @@ class MainTableViewCell: UITableViewCell {
             
         }
         
+        if indexPath == selected {
+            self.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+            
+        } else {
+            self.contentView.backgroundColor = .black
+            
+        }
+        
     }
     
-    func setupUIForMainTableView() {
+    func setUpMainTableViewCell() {
         contentView.backgroundColor = .black
         
         titleLabel.font = Nanum.bold(24)

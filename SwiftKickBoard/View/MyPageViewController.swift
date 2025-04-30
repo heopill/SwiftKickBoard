@@ -217,9 +217,15 @@ extension MyPageViewController: UITableViewDelegate {
                 selectedMainTableIndex == indexPath {
                 
                 detailTableView.isHidden.toggle()
+                
             }
             
-            selectedMainTableIndex = indexPath
+            if detailTableView.isHidden {
+                selectedMainTableIndex = nil
+            } else {
+                selectedMainTableIndex = indexPath
+            }
+            
             tableView.reloadData()
             detailTableView.reloadData()
         }
@@ -249,28 +255,13 @@ extension MyPageViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
         
         if tableView == mainTableView {
-            cell.mainTableViewCellDetail(indexPath: indexPath)
+            cell.setUpMainTableViewCell()
+            cell.mainTableViewCellDetail(indexPath: indexPath, selected: selectedMainTableIndex)
             
-            if indexPath == selectedMainTableIndex {
-                cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
-                
-            } else {
-                cell.contentView.backgroundColor = .black
-                
-            }
             
         } else {
-            cell.setupUIForDetailTableView()
-            
-            if let selectedMainTableIndex,
-               selectedMainTableIndex.row == 0 {
-                cell.titleLabel.text = "#0000"
-                
-            } else if let selectedMainTableIndex,
-                      selectedMainTableIndex.row == 1 {
-                cell.titleLabel.text = "25.04.29"
-                
-            }
+            cell.setUpDetailTableViewCell()
+            cell.detailTableViewCellDetail(indexPath: indexPath, selected: selectedMainTableIndex)
             
         }
         
