@@ -50,7 +50,7 @@ class MyPageTableViewCell: UITableViewCell {
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: MyPageTableViewCell.id)
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
     }
     
     override func prepareForReuse() {

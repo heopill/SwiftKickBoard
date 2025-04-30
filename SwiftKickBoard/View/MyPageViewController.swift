@@ -67,6 +67,7 @@ class MyPageViewController: UIViewController {
         table.delegate = self
         table.dataSource = self
         table.register(MyPageTableViewCell.self, forCellReuseIdentifier: MyPageTableViewCell.id)
+        table.register(MyPageTableViewHeader.self, forHeaderFooterViewReuseIdentifier: MyPageTableViewHeader.id)
         
         return table
     }()
@@ -163,42 +164,11 @@ extension MyPageViewController {
 extension MyPageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if tableView == mainTableView {
-            let header = UIView()
-            let defaultTextLabel = UILabel()
-            let stateTextLabel = UILabel()
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyPageTableViewHeader.id) as? MyPageTableViewHeader else { return UIView() }
             
-            let defaultText = "현재 SWIFT를"
-            let diffDefaultText = "SWIFT"
-            
-            header.backgroundColor = .black
-            
-            defaultTextLabel.textColor = .white
-            defaultTextLabel.font = Nanum.bold(22)
-            
-            let attribute = NSMutableAttributedString(string: defaultText)
-            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: (defaultText as NSString).range(of: diffDefaultText))
-            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (defaultText as NSString).range(of: diffDefaultText))
-            
-            defaultTextLabel.attributedText = attribute
-            
-            stateTextLabel.textColor = .main
-            stateTextLabel.font = Nanum.bold(22)
-            stateTextLabel.text = "이용 중"
-            
-            header.addSubview(defaultTextLabel)
-            header.addSubview(stateTextLabel)
-            
-            defaultTextLabel.snp.makeConstraints {
-                $0.centerY.equalToSuperview()
-                $0.leading.equalToSuperview().inset(20)
-            }
-            
-            stateTextLabel.snp.makeConstraints {
-                $0.bottom.equalTo(defaultTextLabel.snp.bottom)
-                $0.leading.equalTo(defaultTextLabel.snp.trailing).offset(8)
-            }
-            
+            header.setHeaderText(title: "현재 SWIFT를", highlight: "SWIFT")
             return header
+            
         } else {
             return nil
         }
