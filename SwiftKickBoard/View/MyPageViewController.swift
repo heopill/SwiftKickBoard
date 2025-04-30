@@ -66,7 +66,7 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = .black
         table.delegate = self
         table.dataSource = self
-        table.register(MyPageTableViewCell.self, forCellReuseIdentifier: MyPageTableViewCell.id)
+        table.register(MyPageMainTableViewCell.self, forCellReuseIdentifier: MyPageMainTableViewCell.id)
         table.register(MyPageTableViewHeader.self, forHeaderFooterViewReuseIdentifier: MyPageTableViewHeader.id)
         
         return table
@@ -77,7 +77,7 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
         table.delegate = self
         table.dataSource = self
-        table.register(MyPageTableViewCell.self, forCellReuseIdentifier: MyPageTableViewCell.id)
+        table.register(MyPageDetailTableViewCell.self, forCellReuseIdentifier: MyPageDetailTableViewCell.id)
         table.isHidden = true
         
         return table
@@ -225,19 +225,21 @@ extension MyPageViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageTableViewCell.id, for: indexPath) as? MyPageTableViewCell else { return UITableViewCell() }
         
         if tableView == mainTableView {
-            cell.setUpMainTableViewCell()
-            cell.didSelectCellForMain(indexPath: indexPath, selected: selectedMainTableIndex)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageMainTableViewCell.id, for: indexPath) as? MyPageMainTableViewCell else { return UITableViewCell() }
+            
+            cell.cellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
+            
+            return cell
             
         } else {
-            cell.setUpDetailTableViewCell()
-            cell.detailCellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageDetailTableViewCell.id, for: indexPath) as? MyPageDetailTableViewCell else { return UITableViewCell() }
+            cell.cellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
             
+            return cell
         }
         
-        return cell
     }
     
     
