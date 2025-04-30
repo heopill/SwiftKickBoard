@@ -3,12 +3,14 @@ import NMapsMap
 import CoreLocation
 import CoreData
 
-class MainViewController: UIViewController, CLLocationManagerDelegate {
+class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapViewCameraDelegate {
 
     let locationManager = CLLocationManager()
     var mapView: NMFMapView!
     
     var kickBoardData: [KickBoardModel] = []
+    var kickBoardMarkers: [NMFMarker] = []
+    
     let coredata = CoreData.shared
 
     override func viewDidLoad() {
@@ -33,6 +35,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     private func setupMapView() {
         mapView = NMFMapView(frame: view.bounds)
         mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        mapView.addCameraDelegate(delegate: self)
         view.addSubview(mapView)
     }
 
@@ -60,7 +63,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
         view.addSubview(gpsButton)
 
         NSLayoutConstraint.activate([
-            gpsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -80),
+            gpsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
             gpsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             gpsButton.widthAnchor.constraint(equalToConstant: 60),
             gpsButton.heightAnchor.constraint(equalToConstant: 60)
@@ -95,11 +98,25 @@ class MainViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     private func displayKickBoardMarkers() {
+        
+        kickBoardMarkers.forEach { $0.mapView = nil }
+        kickBoardMarkers.removeAll()
+        
         for kickBoard in kickBoardData {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: kickBoard.lat, lng: kickBoard.lon)
             marker.iconImage = NMFOverlayImage(name: "markerImage")
             marker.mapView = mapView
+            kickBoardMarkers.append(marker)
+        }
+    }
+    
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        let currentZoom = mapView.zoomLevel
+        let threshold: Double = 14
+        
+        for marker in kickBoardMarkers {
+            marker.mapView = currentZoom >= threshold ? mapView : nil
         }
     }
 }
