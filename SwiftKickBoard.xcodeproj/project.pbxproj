@@ -7,16 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9301FDF92DC1F5F000FB87DD /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 9301FDF82DC1F5F000FB87DD /* NMapsMap */; };
 		BB40A47A2DBB62EC005826E0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BB40A4792DBB62EC005826E0 /* SnapKit */; };
 		BB5B59CE2DBF5C3300FCE82F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB5B59CD2DBF5C3300FCE82F /* Alamofire */; };
+		BBFC9A382DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFC9A372DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift */; };
+		BBFC9A392DC1C68D0055A450 /* KickBoard+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFC9A362DC1C68D0055A450 /* KickBoard+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftKickBoard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBFC9A362DC1C68D0055A450 /* KickBoard+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KickBoard+CoreDataClass.swift"; sourceTree = "<group>"; };
+		BBFC9A372DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KickBoard+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BB40A4572DBB5E4B005826E0 /* Exceptions for "SwiftKickBoard" folder in "SwiftKickBoard" target */ = {
+		676B98462DC0DEEB007DEF07 /* Exceptions for "SwiftKickBoard" folder in "SwiftKickBoard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -29,7 +34,7 @@
 		BB40A4472DBB5E48005826E0 /* SwiftKickBoard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				BB40A4572DBB5E4B005826E0 /* Exceptions for "SwiftKickBoard" folder in "SwiftKickBoard" target */,
+				676B98462DC0DEEB007DEF07 /* Exceptions for "SwiftKickBoard" folder in "SwiftKickBoard" target */,
 			);
 			path = SwiftKickBoard;
 			sourceTree = "<group>";
@@ -42,6 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB40A47A2DBB62EC005826E0 /* SnapKit in Frameworks */,
+				9301FDF92DC1F5F000FB87DD /* NMapsMap in Frameworks */,
 				BB5B59CE2DBF5C3300FCE82F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,10 +55,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9301FDF72DC1F5F000FB87DD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BB40A43C2DBB5E48005826E0 = {
 			isa = PBXGroup;
 			children = (
+				BBFC9A362DC1C68D0055A450 /* KickBoard+CoreDataClass.swift */,
+				BBFC9A372DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift */,
 				BB40A4472DBB5E48005826E0 /* SwiftKickBoard */,
+				9301FDF72DC1F5F000FB87DD /* Frameworks */,
 				BB40A4462DBB5E48005826E0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,6 +103,7 @@
 			packageProductDependencies = (
 				BB40A4792DBB62EC005826E0 /* SnapKit */,
 				BB5B59CD2DBF5C3300FCE82F /* Alamofire */,
+				9301FDF82DC1F5F000FB87DD /* NMapsMap */,
 			);
 			productName = SwiftKickBoard;
 			productReference = BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */;
@@ -119,6 +136,7 @@
 			packageReferences = (
 				BB40A4782DBB62EC005826E0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BB5B59CC2DBF5C3300FCE82F /* XCRemoteSwiftPackageReference "Alamofire" */,
+				934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BB40A4462DBB5E48005826E0 /* Products */;
@@ -145,6 +163,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBFC9A382DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift in Sources */,
+				BBFC9A392DC1C68D0055A450 /* KickBoard+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,8 +178,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9B88K6QB5H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SwiftKickBoard/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치를 지도에 표시하기 위해 사용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -170,7 +192,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.SwiftKickBoard;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yoon.SwiftKickBoard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -185,8 +207,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9B88K6QB5H;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SwiftKickBoard/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "현재 위치를 지도에 표시하기 위해 사용합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -197,7 +221,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.SwiftKickBoard;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yoon.SwiftKickBoard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -348,6 +372,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.21.0;
+			};
+		};
 		BB40A4782DBB62EC005826E0 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -367,6 +399,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9301FDF82DC1F5F000FB87DD /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
+		};
 		BB40A4792DBB62EC005826E0 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BB40A4782DBB62EC005826E0 /* XCRemoteSwiftPackageReference "SnapKit" */;
