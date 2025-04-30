@@ -259,11 +259,11 @@ extension MyPageViewController: UITableViewDataSource {
         
         if tableView == mainTableView {
             cell.setUpMainTableViewCell()
-            cell.mainTableViewCellDetail(indexPath: indexPath, selected: selectedMainTableIndex)
+            cell.didSelectCellForMain(indexPath: indexPath, selected: selectedMainTableIndex)
             
         } else {
             cell.setUpDetailTableViewCell()
-            cell.detailTableViewCellDetail(indexPath: indexPath, selected: selectedMainTableIndex)
+            cell.detailCellChanges(selected: selectedMainTableIndex)
             
         }
         

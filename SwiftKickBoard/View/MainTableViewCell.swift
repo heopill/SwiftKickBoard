@@ -58,14 +58,19 @@ class MainTableViewCell: UITableViewCell {
         countLabel.text = nil
     }
     
-    func detailTableViewCellDetail(indexPath: IndexPath, selected: IndexPath?) {
-        if let selected, selected.row == 0 {
-            self.titleLabel.text = "#0000"
+    func detailCellChanges(selected: IndexPath?) {
+        
+        if let selected {
             
-        } else if let selected, selected.row == 1 {
-            self.titleLabel.text = "25.04.29"
-            
+            if selected.row == 0 {
+                self.titleLabel.text = "#0000"
+                
+            } else if selected.row == 1 {
+                self.titleLabel.text = "25.04.29"
+                
+            }
         }
+        
     }
     
     func setUpDetailTableViewCell() {
@@ -89,7 +94,7 @@ class MainTableViewCell: UITableViewCell {
         
     }
     
-    func mainTableViewCellDetail(indexPath: IndexPath, selected: IndexPath?) {
+    func didSelectCellForMain(indexPath: IndexPath, selected: IndexPath?) {
         if indexPath.row == 0 {
             self.titleIcon.image = UIImage(named: "kickboard")
             self.titleLabel.text = "등록한 킥보드"
