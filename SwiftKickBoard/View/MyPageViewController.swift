@@ -167,14 +167,16 @@ extension MyPageViewController: UITableViewDelegate {
             let defaultTextLabel = UILabel()
             let stateTextLabel = UILabel()
             
+            let defaultText = "현재 SWIFT를"
+            
             header.backgroundColor = .black
             
             defaultTextLabel.textColor = .white
             defaultTextLabel.font = Nanum.bold(22)
             
-            let attribute = NSMutableAttributedString(string: "현재 SWIFT를")
-            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
-            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
+            let attribute = NSMutableAttributedString(string: defaultText)
+            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: (defaultText as NSString).range(of: "SWIFT"))
+            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (defaultText as NSString).range(of: "SWIFT"))
             
             defaultTextLabel.attributedText = attribute
             
@@ -257,7 +259,6 @@ extension MyPageViewController: UITableViewDataSource {
         if tableView == mainTableView {
             cell.setUpMainTableViewCell()
             cell.mainTableViewCellDetail(indexPath: indexPath, selected: selectedMainTableIndex)
-            
             
         } else {
             cell.setUpDetailTableViewCell()
