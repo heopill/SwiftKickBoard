@@ -9,45 +9,17 @@ import UIKit
 
 class TabBarButton: UIButton {
     
-    private var defaultImage: UIImage?
-    private var selectedImage: UIImage?
-    var buttonIsSelected: Bool = false {
-        didSet {
-            if buttonIsSelected {
-                setTitleFont(Nanum.bold(14))
-                setImage(selectedImage)
-            } else {
-                setTitleFont(Nanum.light(12))
-                setImage(defaultImage)
-            }
-        }
-    }
+    var buttonIsSelected: Bool = false
     
-    init(title: String, defaultImage: UIImage?, selectedImage: UIImage?) {
+    init(image: UIImage?) {
         super.init(frame: .zero)
         
-        self.defaultImage = defaultImage
-        self.selectedImage = selectedImage
-        
-        var config = UIButton.Configuration.plain()
-        config.image = defaultImage
-        config.imagePadding = 4
-        config.imagePlacement = .top
-        
-        var attributeString = AttributedString.init(title)
-        attributeString.font = Nanum.light(12)
-        config.attributedTitle = attributeString
-        
-        self.configuration = config
+        self.setImage(image, for: .normal)
         self.tintColor = .white
     }
     
-    private func setTitleFont(_ font: UIFont?) {
-        self.configuration?.attributedTitle?.font = font
-    }
-    
-    private func setImage(_ image: UIImage?) {
-        self.configuration?.image = image
+    private func changeImage(_ image: UIImage?) {
+        
     }
     
     required init?(coder: NSCoder) {
