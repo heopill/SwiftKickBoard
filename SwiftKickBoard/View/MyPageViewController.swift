@@ -168,6 +168,7 @@ extension MyPageViewController: UITableViewDelegate {
             let stateTextLabel = UILabel()
             
             let defaultText = "현재 SWIFT를"
+            let diffDefaultText = "SWIFT"
             
             header.backgroundColor = .black
             
@@ -175,8 +176,8 @@ extension MyPageViewController: UITableViewDelegate {
             defaultTextLabel.font = Nanum.bold(22)
             
             let attribute = NSMutableAttributedString(string: defaultText)
-            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: (defaultText as NSString).range(of: "SWIFT"))
-            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (defaultText as NSString).range(of: "SWIFT"))
+            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: (defaultText as NSString).range(of: diffDefaultText))
+            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (defaultText as NSString).range(of: diffDefaultText))
             
             defaultTextLabel.attributedText = attribute
             
