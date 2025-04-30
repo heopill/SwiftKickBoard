@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		676B98422DC0D9D9007DEF07 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 676B98412DC0D9D9007DEF07 /* NMapsMap */; };
+		9301FDF92DC1F5F000FB87DD /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 9301FDF82DC1F5F000FB87DD /* NMapsMap */; };
 		BB40A47A2DBB62EC005826E0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BB40A4792DBB62EC005826E0 /* SnapKit */; };
 		BB5B59CE2DBF5C3300FCE82F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB5B59CD2DBF5C3300FCE82F /* Alamofire */; };
-		BBFC9A172DC107170055A450 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = BBFC9A162DC107170055A450 /* NMapsMap */; };
 		BBFC9A382DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFC9A372DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift */; };
 		BBFC9A392DC1C68D0055A450 /* KickBoard+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFC9A362DC1C68D0055A450 /* KickBoard+CoreDataClass.swift */; };
 /* End PBXBuildFile section */
@@ -48,9 +47,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB40A47A2DBB62EC005826E0 /* SnapKit in Frameworks */,
-
-				676B98422DC0D9D9007DEF07 /* NMapsMap in Frameworks */,
-
+				9301FDF92DC1F5F000FB87DD /* NMapsMap in Frameworks */,
 				BB5B59CE2DBF5C3300FCE82F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -58,12 +55,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9301FDF72DC1F5F000FB87DD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BB40A43C2DBB5E48005826E0 = {
 			isa = PBXGroup;
 			children = (
 				BBFC9A362DC1C68D0055A450 /* KickBoard+CoreDataClass.swift */,
 				BBFC9A372DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift */,
 				BB40A4472DBB5E48005826E0 /* SwiftKickBoard */,
+				9301FDF72DC1F5F000FB87DD /* Frameworks */,
 				BB40A4462DBB5E48005826E0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,9 +103,7 @@
 			packageProductDependencies = (
 				BB40A4792DBB62EC005826E0 /* SnapKit */,
 				BB5B59CD2DBF5C3300FCE82F /* Alamofire */,
-
-				676B98412DC0D9D9007DEF07 /* NMapsMap */,
-
+				9301FDF82DC1F5F000FB87DD /* NMapsMap */,
 			);
 			productName = SwiftKickBoard;
 			productReference = BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */;
@@ -133,8 +136,7 @@
 			packageReferences = (
 				BB40A4782DBB62EC005826E0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BB5B59CC2DBF5C3300FCE82F /* XCRemoteSwiftPackageReference "Alamofire" */,
-				676B98402DC0D9D9007DEF07 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
-
+				934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BB40A4462DBB5E48005826E0 /* Products */;
@@ -370,9 +372,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		676B98402DC0D9D9007DEF07 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+		934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.21.0;
@@ -394,20 +396,12 @@
 				minimumVersion = 5.10.2;
 			};
 		};
-		BBFC9A152DC107170055A450 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.21.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		676B98412DC0D9D9007DEF07 /* NMapsMap */ = {
+		9301FDF82DC1F5F000FB87DD /* NMapsMap */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 676B98402DC0D9D9007DEF07 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			package = 934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
 			productName = NMapsMap;
 		};
 		BB40A4792DBB62EC005826E0 /* SnapKit */ = {
@@ -419,11 +413,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = BB5B59CC2DBF5C3300FCE82F /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		BBFC9A162DC107170055A450 /* NMapsMap */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BBFC9A152DC107170055A450 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
-			productName = NMapsMap;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

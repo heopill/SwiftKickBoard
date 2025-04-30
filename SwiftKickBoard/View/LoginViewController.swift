@@ -51,6 +51,8 @@ class LoginViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.textColor = .black
+        
         return tf
     }()
     
@@ -65,6 +67,7 @@ class LoginViewController: UIViewController {
             $0.width.leading.trailing.bottom.equalToSuperview()
         }
         
+        tf.textColor = .black
         tf.isSecureTextEntry = true
         
         return tf
@@ -362,6 +365,10 @@ extension LoginViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             alert.dismiss(animated: true)
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+      view.self.endEditing(true)
     }
     
 }
