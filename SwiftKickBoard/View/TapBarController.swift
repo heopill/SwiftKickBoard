@@ -22,8 +22,20 @@ class TapBarController: UIViewController {
         return view
     }()
     
-    private let homeButton: TabBarButton = {
+    private let mainViewButton: TabBarButton = {
         let button = TabBarButton(image: UIImage(named: "map"))
+        
+        return button
+    }()
+    
+    private let addViewButton: TabBarButton = {
+        let button = TabBarButton(image: UIImage(named: "add"))
+        
+        return button
+    }()
+    
+    private let myPageViewButton: TabBarButton = {
+        let button = TabBarButton(image: UIImage(named: "mypage"))
         
         return button
     }()
