@@ -8,9 +8,9 @@
 import UIKit
 import SnapKit
 
-class MainTableViewCell: UITableViewCell {
+class MyPageTableViewCell: UITableViewCell {
     
-    static let id = "MainTableViewCell"
+    static let id = "MyPageTableViewCell"
     
     let titleIcon: UIImageView = {
         let image = UIImageView()
@@ -49,7 +49,7 @@ class MainTableViewCell: UITableViewCell {
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: MainTableViewCell.id)
+        super.init(style: .default, reuseIdentifier: MyPageTableViewCell.id)
     }
     
     override func prepareForReuse() {

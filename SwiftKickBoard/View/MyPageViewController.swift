@@ -66,7 +66,7 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = .black
         table.delegate = self
         table.dataSource = self
-        table.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.id)
+        table.register(MyPageTableViewCell.self, forCellReuseIdentifier: MyPageTableViewCell.id)
         
         return table
     }()
@@ -76,7 +76,7 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
         table.delegate = self
         table.dataSource = self
-        table.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.id)
+        table.register(MyPageTableViewCell.self, forCellReuseIdentifier: MyPageTableViewCell.id)
         table.isHidden = true
         
         return table
@@ -255,7 +255,7 @@ extension MyPageViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageTableViewCell.id, for: indexPath) as? MyPageTableViewCell else { return UITableViewCell() }
         
         if tableView == mainTableView {
             cell.setUpMainTableViewCell()
