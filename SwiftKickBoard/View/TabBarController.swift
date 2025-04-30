@@ -12,7 +12,7 @@ import SnapKit
 class TabBarController: UIViewController {
     
     private var selectedIndex = 0
-    private var tabBarItems: [TabBarButton] = []
+    private var tabBarItems: [UIButton] = []
     private var viewControllers: [UIViewController] = []
     
     private let tabBar: UIView = {
@@ -23,20 +23,23 @@ class TabBarController: UIViewController {
         return view
     }()
     
-    private let mainViewButton: TabBarButton = {
-        let button = TabBarButton(image: UIImage(named: "map"))
+    private let mainViewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "map"), for: .normal)
         
         return button
     }()
     
-    private let addViewButton: TabBarButton = {
-        let button = TabBarButton(image: UIImage(named: "add"))
+    private let addViewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "add"), for: .normal)
         
         return button
     }()
     
-    private let myPageViewButton: TabBarButton = {
-        let button = TabBarButton(image: UIImage(named: "mypage"))
+    private let myPageViewButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "mypage"), for: .normal)
         
         return button
     }()
@@ -60,6 +63,7 @@ extension TabBarController {
         }
         
         setupUI()
+        attchView(selectedIndex)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,22 +78,24 @@ extension TabBarController {
     
     @objc private func tabBarButtonTapped(_ sender: UIButton) {
         guard self.selectedIndex != sender.tag else { return }
+        
+        removeView(selectedIndex)
+        attchView(sender.tag)
+        
+        self.selectedIndex = sender.tag
     }
     
     private func attchView(_ index: Int) {
-        tabBarItems[index].buttonIsSelected = true
-        
         let viewController = viewControllers[index]
         viewController.view.frame = view.frame
         viewController.didMove(toParent: self)
+        
         self.addChild(viewController)
         self.view.addSubview(viewController.view)
         self.view.bringSubviewToFront(tabBar)
     }
     
     private func removeView(_ index: Int) {
-        tabBarItems[index].buttonIsSelected = false
-        
         let viewController = viewControllers[index]
         viewController.willMove(toParent: nil)
         viewController.view.removeFromSuperview()
