@@ -109,7 +109,11 @@ extension MyPageViewController {
 extension MyPageViewController {
     
     @objc private func logoutButtonTapped(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        guard let window = self.view.window else { return }
+        
+        UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            window.rootViewController = UINavigationController(rootViewController: LoginViewController())
+        }, completion: nil)
         UserDefaults.standard.set(false, forKey: "autoLogin")
     }
     
@@ -250,7 +254,7 @@ extension MyPageViewController: UITableViewDataSource {
         if tableView == mainTableView {
             return 2
         } else {
-            return 10
+            return CoreData.shared.readAllData().count
         }
     }
     
@@ -263,7 +267,7 @@ extension MyPageViewController: UITableViewDataSource {
             
         } else {
             cell.setUpDetailTableViewCell()
-            cell.detailCellChanges(selected: selectedMainTableIndex)
+            cell.detailCellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
             
         }
         

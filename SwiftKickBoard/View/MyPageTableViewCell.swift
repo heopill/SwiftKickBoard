@@ -11,6 +11,7 @@ import SnapKit
 class MyPageTableViewCell: UITableViewCell {
     
     static let id = "MyPageTableViewCell"
+    private var kickBoardData: [KickBoard] = []
     
     let titleIcon: UIImageView = {
         let image = UIImageView()
@@ -58,14 +59,18 @@ class MyPageTableViewCell: UITableViewCell {
         countLabel.text = nil
     }
     
-    func detailCellChanges(selected: IndexPath?) {
+    func detailCellChanges(indexPath: IndexPath, selected: IndexPath?) {
         
         if let selected {
+            kickBoardData = CoreData.shared.readAllData()
+            let lat = String(format: "%.2f", kickBoardData[indexPath.row].lat)
+            let lon = String(format: "%.2f", kickBoardData[indexPath.row].lon)
             
             if selected.row == 0 {
-                self.titleLabel.text = "#0000"
+                self.titleLabel.text = "ID: #\(kickBoardData[indexPath.row].id)"
+                self.countLabel.text = "(\(lat)), (\(lon))"
                 
-            } else if selected.row == 1 {
+            } else {
                 self.titleLabel.text = "25.04.29"
                 
             }
@@ -73,32 +78,13 @@ class MyPageTableViewCell: UITableViewCell {
         
     }
     
-    func setUpDetailTableViewCell() {
-        contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
-        
-        [titleLabel, separaterView]
-            .forEach { contentView.addSubview($0) }
-        
-        titleLabel.font = Nanum.light(24)
-        
-        titleLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(20)
-        }
-        
-        separaterView.snp.makeConstraints {
-            $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview().inset(8)
-            $0.bottom.equalToSuperview()
-        }
-        
-    }
-    
     func didSelectCellForMain(indexPath: IndexPath, selected: IndexPath?) {
+        kickBoardData = CoreData.shared.readAllData()
+        
         if indexPath.row == 0 {
             self.titleIcon.image = UIImage(named: "kickboard")
             self.titleLabel.text = "등록한 킥보드"
-            self.countLabel.text = "~개"
+            self.countLabel.text = "\(kickBoardData.count)개"
             
         } else if indexPath.row == 1 {
             self.titleIcon.image = UIImage(named: "history")
@@ -113,6 +99,33 @@ class MyPageTableViewCell: UITableViewCell {
         } else {
             self.contentView.backgroundColor = .black
             
+        }
+        
+    }
+    
+    func setUpDetailTableViewCell() {
+        contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+        
+        [titleLabel, countLabel, separaterView]
+            .forEach { contentView.addSubview($0) }
+        
+        titleLabel.font = Nanum.bold(24)
+        countLabel.font = Nanum.light(24)
+        
+        titleLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().inset(20)
+        }
+        
+        countLabel.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
+        }
+        
+        separaterView.snp.makeConstraints {
+            $0.height.equalTo(0.5)
+            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.bottom.equalToSuperview()
         }
         
     }
