@@ -43,6 +43,13 @@ class TabBarController: UIViewController {
         
         return button
     }()
+    
+    func hideTabBar() {
+        tabBar.isHidden = true
+    }
+    func showTabBar() {
+        tabBar.isHidden = false
+    }
 }
 
 // MARK: - Lifecycle
@@ -130,3 +137,5 @@ extension TabBarController {
         }
     }
 }
+
+

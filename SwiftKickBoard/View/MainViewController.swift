@@ -2,6 +2,7 @@ import UIKit
 import NMapsMap
 import CoreLocation
 import CoreData
+import SnapKit
 
 class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapViewCameraDelegate {
 
@@ -12,6 +13,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
     var kickBoardMarkers: [NMFMarker] = []
     
     let coredata = CoreData.shared
+    private let detailView = KickBoardDetailView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +21,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         setupMapView()
         setupLogoLabel()
         setupGPSButton()
+        setupDetailView()
 
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -30,6 +33,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         super.viewWillAppear(animated)
         readKickBoardData()
         displayKickBoardMarkers()
+        detailView.isHidden = true
+        
+        if let nav = self.parent as? UINavigationController,
+           let tabBarVC = nav.parent as? TabBarController {
+            tabBarVC.showTabBar()
+        }
     }
 
     private func setupMapView() {
@@ -70,6 +79,16 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         ])
     }
 
+    private func setupDetailView() {
+        view.addSubview(detailView)
+        detailView.isHidden = true
+        
+        detailView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(280)
+        }
+    }
+    
     @objc func gpsButtonTapped() {
         guard let location = locationManager.location else { return }
 
@@ -107,6 +126,19 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
             marker.position = NMGLatLng(lat: kickBoard.lat, lng: kickBoard.lon)
             marker.iconImage = NMFOverlayImage(name: "markerImage")
             marker.mapView = mapView
+            
+            marker.touchHandler = { [weak self] overlay -> Bool in
+                guard let self = self else {return false}
+                
+                self.detailView.isHidden = false
+                self.view.bringSubviewToFront(self.detailView)
+                
+                if let nav = self.parent as? UINavigationController,
+                   let tabBarVC = nav.parent as? TabBarController {
+                    tabBarVC.hideTabBar()
+                }
+                return true
+            }
             kickBoardMarkers.append(marker)
         }
     }
