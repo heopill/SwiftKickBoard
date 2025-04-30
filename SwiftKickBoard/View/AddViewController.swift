@@ -38,21 +38,21 @@ class AddViewController: UIViewController {
         let cameraUpdate = NMFCameraUpdate(position: cameraPosition)
         mapView.moveCamera(cameraUpdate)
         
-        //        let marker = NMFMarker()
-        //        marker.position = NMGLatLng(lat: 37.557175, lng: 126.924574)
-        //        marker.iconImage = NMFOverlayImage(name: "markerImage")
-        //        marker.mapView = mapView
-        //
-        //        let marker2 = NMFMarker()
-        //        marker2.position = NMGLatLng(lat: 37.556520, lng: 126.922885)
-        //        marker2.iconImage = NMFOverlayImage(name: "markerImage")
-        //        marker2.mapView = mapView
-        //
-        //        let marker3 = NMFMarker()
-        //        marker3.position = NMGLatLng(lat: 37.556154, lng: 126.925167)
-        //        marker3.iconImage = NMFOverlayImage(name: "markerImage")
-        //        marker3.mapView = mapView
-        
+//                let marker = NMFMarker()
+//                marker.position = NMGLatLng(lat: 37.557175, lng: 126.924574)
+//                marker.iconImage = NMFOverlayImage(name: "markerImage")
+//                marker.mapView = mapView
+//        
+//                let marker2 = NMFMarker()
+//                marker2.position = NMGLatLng(lat: 37.556520, lng: 126.922885)
+//                marker2.iconImage = NMFOverlayImage(name: "markerImage")
+//                marker2.mapView = mapView
+//        
+//                let marker3 = NMFMarker()
+//                marker3.position = NMGLatLng(lat: 37.556154, lng: 126.925167)
+//                marker3.iconImage = NMFOverlayImage(name: "markerImage")
+//                marker3.mapView = mapView
+//        
         return mapView
     }()
     
