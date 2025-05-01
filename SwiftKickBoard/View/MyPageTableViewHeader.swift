@@ -12,6 +12,9 @@ class MyPageTableViewHeader: UITableViewHeaderFooterView {
     
     static let id = "MyPageTableViewHeader"
     
+    private let titleText = "현재 SWIFT를"
+    private let titleHighlight = "SWIFT"
+    
     private let defaultTextLabel: UILabel = {
         let label = UILabel()
         
@@ -36,14 +39,18 @@ class MyPageTableViewHeader: UITableViewHeaderFooterView {
         setUpUI()
     }
     
-    func setHeaderText(title: String, highlight: String) {
+    func setHeaderText() {
         
-        let attribute = NSMutableAttributedString(string: title)
-        attribute.addAttributes([.font: Nanum.heavy(34) as Any], range: (title as NSString).range(of: highlight))
-        attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (title as NSString).range(of: highlight))
+        let attribute = NSMutableAttributedString(string: titleText)
+        attribute.addAttributes([.font: Nanum.heavy(34) as Any], range: (titleText as NSString).range(of: titleHighlight))
+        attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (titleText as NSString).range(of: titleHighlight))
         
         defaultTextLabel.attributedText = attribute
         
+    }
+    
+    func setState(state: Bool) {
+        stateTextLabel.text = state ? "이용 중" : "찾는 중"
     }
     
     private func setUpUI() {

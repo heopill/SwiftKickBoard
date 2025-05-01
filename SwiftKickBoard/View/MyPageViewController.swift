@@ -12,6 +12,7 @@ import SnapKit
 class MyPageViewController: UIViewController {
     
     var selectedMainTableIndex: IndexPath?
+    private let state = HistoryManager()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -104,6 +105,10 @@ extension MyPageViewController {
         self.navigationController?.navigationBar.isHidden = true
         self.mainTableView.reloadData()
         self.detailTableView.reloadData()
+        
+        mainTableView.beginUpdates()
+        mainTableView.reloadSections(IndexSet(integer: 0), with: .none)
+        mainTableView.endUpdates()
     }
     
 }
@@ -168,7 +173,8 @@ extension MyPageViewController: UITableViewDelegate {
         if tableView == mainTableView {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyPageTableViewHeader.id) as? MyPageTableViewHeader else { return UIView() }
             
-            header.setHeaderText(title: "현재 SWIFT를", highlight: "SWIFT")
+            header.setState(state: state.fetchState())
+            header.setHeaderText()
             return header
             
         } else {

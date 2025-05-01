@@ -7,6 +7,8 @@ class KickBoardDetailView: UIView {
         case available
         case rented
     }
+    
+    private let state = HistoryManager()
 
     private let idLabel = UILabel()
     private let kmLabel = UILabel()
@@ -175,6 +177,7 @@ class KickBoardDetailView: UIView {
             rentalTimer?.invalidate()
             rentalTimer = nil
             rentalStartTime = nil
+            state.updateState(upState: false)
 
         case .rented:
             kmLabel.text = "100Km 주행 가능"
@@ -183,7 +186,10 @@ class KickBoardDetailView: UIView {
             rentalStartTime = Date()
             updateRentalTime()
             startRentalTimer()
+            state.updateState(upState: true)
         }
+        
+        print("현재 대여상태: \(state.fetchState())")
     }
 
     private func startRentalTimer() {
