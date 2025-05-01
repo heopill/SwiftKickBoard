@@ -17,6 +17,7 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     var coredata = CoreData.shared
     let locationManager = CLLocationManager()
     let tempMarker = NMFMarker()
+    var markers: [NMFMarker] = []
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -150,7 +151,7 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
             make.leading.equalToSuperview().offset(44)
             make.top.equalTo(xTextField.snp.bottom).offset(7)
         }
-
+        
         yTextField.snp.makeConstraints { make in
             make.leading.equalTo(xTextField.snp.trailing).offset(28)
             make.trailing.equalToSuperview().inset(50)
@@ -166,7 +167,7 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
         }
         
         addButton.snp.makeConstraints { make in
-            make.top.equalTo(xUnderLine.snp.bottom).offset(32)
+            make.top.equalTo(xUnderLine.snp.bottom).offset(22)
             make.leading.equalToSuperview().offset(46)
             make.trailing.equalToSuperview().inset(46)
             make.height.equalTo(55)
@@ -208,13 +209,13 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     @objc func gpsButtonTapped() {
         print("gps 버튼 클릭")
         guard let location = locationManager.location else { return }
-
+        
         let coord = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
         let cameraUpdate = NMFCameraUpdate(position: NMFCameraPosition(coord, zoom: 16, tilt: 0, heading: 0))
         cameraUpdate.animation = .easeIn
-
+        
         mapView.moveCamera(cameraUpdate)
-
+        
         mapView.locationOverlay.location = coord
         mapView.locationOverlay.hidden = false
     }
@@ -224,6 +225,7 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
         view.self.endEditing(true)
     }
     
+    // 실시간 위치
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if manager.authorizationStatus == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
@@ -233,12 +235,54 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     // 지도에 마커를 추가하는 함수
     private func displayKickBoardMarkers(on mapView: NMFMapView, with data: [KickBoardModel]) {
         tempMarker.mapView = nil
+        for marker in markers {
+            marker.mapView = nil
+        }
+        markers.removeAll()
         
+        // 받아온 킥보드 데이터를 이용하여 마커 생성
         for kickBoard in data {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: kickBoard.lat, lng: kickBoard.lon)
             marker.iconImage = NMFOverlayImage(name: "markerImage")
             marker.mapView = mapView
+            
+            marker.touchHandler = { [weak self] (overlay: NMFOverlay) -> Bool in
+                guard let self = self else { return false }
+                
+                let alert = UIAlertController(
+                    title: "킥보드 정보",
+                    message: "\(kickBoard.id)번 킥보드\n위도: \(kickBoard.lat)\n경도: \(kickBoard.lon)",
+                    preferredStyle: .alert
+                )
+                
+                // 삭제 버튼
+                let deleteAction = UIAlertAction(title: "삭제", style: .destructive) { _ in
+                    self.coredata.deleteData(id: kickBoard.id)
+                    self.readData()
+                    self.displayKickBoardMarkers(on: self.mapView, with: self.kickBoardData)
+                    
+                    // 삭제 후 뜨는 알러트
+                    let completionAlert = UIAlertController(
+                        title: "삭제 완료",
+                        message: "\(kickBoard.id)번 킥보드가 삭제되었습니다.",
+                        preferredStyle: .alert
+                    )
+                    completionAlert.addAction(UIAlertAction(title: "확인", style: .default))
+                    self.present(completionAlert, animated: true)
+                }
+                
+                // 취소 버튼
+                let cancleAction = UIAlertAction(title: "취소", style: .default)
+                
+                alert.addAction(cancleAction)
+                alert.addAction(deleteAction)
+                
+                self.present(alert, animated: true)
+                
+                return true
+            }
+            markers.append(marker)
         }
     }
     
