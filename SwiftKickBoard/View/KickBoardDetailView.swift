@@ -166,6 +166,20 @@ class KickBoardDetailView: UIView {
 
     @objc private func didTapReturnButton() {
         updateStatus(.available)
+        
+        guard let start = rentalStartTime else {return}
+        
+        let interval = Int(Date().timeIntervalSince(start)) //대여 시간 계산
+        let minutes = interval / 60
+        let seconds = interval % 60
+        
+        let formattedTime = "\(minutes)분 \(seconds)초" // 경과 시간 포맷팅
+
+        let formatter = DateFormatter() // 오늘날짜 포맷팅
+        formatter.dateFormat = "yyyy.MM.dd"
+        let today = formatter.string(from: Date())
+        
+        HistoryManager().updateHistory(date: today, runTime: formattedTime) //HistoryManager에 [날짜, 이용시간] 기록저장
     }
 
     func updateStatus(_ status: KickBoardStatus) {
@@ -201,6 +215,7 @@ class KickBoardDetailView: UIView {
 
     private func updateRentalTime() {
         guard let start = rentalStartTime else { return }
+
         let interval = Int(Date().timeIntervalSince(start))
         let minutes = interval / 60
         let seconds = interval % 60
