@@ -12,6 +12,7 @@ import SnapKit
 class LoginViewController: UIViewController {
     
     private let login = LoginManager()
+    let launchView = LaunchView()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -157,8 +158,8 @@ class LoginViewController: UIViewController {
         let kakao = UIButton()
         
         apple.setImage(UIImage(named: "apple"), for: .normal)
-        google.setImage(UIImage(named: "Google"), for: .normal)
-        kakao.setImage(UIImage(named: "KAKAO"), for: .normal)
+        google.setImage(UIImage(named: "google"), for: .normal)
+        kakao.setImage(UIImage(named: "kakao"), for: .normal)
         [apple, google, kakao].forEach {
             $0.addTarget(self, action: #selector(eazyLoginButtonTapped), for: .touchUpInside)
         }
@@ -178,6 +179,17 @@ extension LoginViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        launchView.frame = view.bounds
+        view.addSubview(launchView)
+        
+        // 여기서 맨 앞의 뷰로 확실히 지정해줌
+        view.bringSubviewToFront(launchView)
+        
+        // 현재에서 2초 후에 dismiss되게 세팅
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.dismissLaunchView()
+        }
         
         if UserDefaults.standard.bool(forKey: "autoLogin") {
             guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
@@ -267,6 +279,15 @@ extension LoginViewController {
         eazyLoginButtonStackView.snp.makeConstraints {
             $0.top.equalTo(eazyLoginLabel.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
+        }
+    }
+    
+    // LaunchView를 사라지게 하는 함수
+    func dismissLaunchView() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.launchView.alpha = 0
+        }) { _ in
+            self.launchView.removeFromSuperview()
         }
     }
     
