@@ -11,8 +11,6 @@ import SnapKit
 class MyPageMainTableViewCell: UITableViewCell {
     
     static let id = "MyPageMainTableViewCell"
-    private var kickBoardData: [KickBoard] = []
-    private var historyData: [[String]] = []
     
     let titleIcon: UIImageView = {
         let image = UIImageView()
@@ -57,9 +55,7 @@ class MyPageMainTableViewCell: UITableViewCell {
     
 
     
-    func cellChanges(indexPath: IndexPath, selected: IndexPath?) {
-        kickBoardData = CoreData.shared.readAllData()
-        historyData = HistoryManager().fetchHistory()
+    func cellChanges(indexPath: IndexPath, selected: IndexPath?, kickBoardData: [KickBoard], historyData: [[String]]) {
         
         if indexPath.row == 0 {
             self.titleIcon.image = UIImage(named: "kickboard")

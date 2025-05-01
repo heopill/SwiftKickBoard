@@ -13,7 +13,8 @@ class MyPageViewController: UIViewController {
     
     var selectedMainTableIndex: IndexPath?
     private var detailTableViewCount = 0
-    private let historyData = HistoryManager()
+    private var kickBoardData: [KickBoard] = []
+    private var historyData: [[String]] = []
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -74,12 +75,23 @@ class MyPageViewController: UIViewController {
         return table
     }()
     
-    private lazy var detailTableView: UITableView = {
+    private lazy var kickBoardTableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
         table.delegate = self
         table.dataSource = self
-        table.register(MyPageDetailTableViewCell.self, forCellReuseIdentifier: MyPageDetailTableViewCell.id)
+        table.register(MyPageKickBoardTableViewCell.self, forCellReuseIdentifier: MyPageKickBoardTableViewCell.id)
+        table.isHidden = true
+        
+        return table
+    }()
+    
+    private lazy var historyTableView: UITableView = {
+        let table = UITableView()
+        table.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+        table.delegate = self
+        table.dataSource = self
+        table.register(MyPageHistoryTableViewCell.self, forCellReuseIdentifier: MyPageHistoryTableViewCell.id)
         table.isHidden = true
         
         return table
@@ -103,9 +115,12 @@ extension MyPageViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.historyData = HistoryManager().fetchHistory()
+        self.kickBoardData = CoreData.shared.readAllData()
+        
         self.navigationController?.navigationBar.isHidden = true
         self.mainTableView.reloadData()
-        self.detailTableView.reloadData()
+        self.kickBoardTableView.reloadData()
     }
     
 }
@@ -121,7 +136,7 @@ extension MyPageViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        [titleLabel, nameLabel, helloLabel, idLabel, logoutButton, mainTableView, detailTableView]
+        [titleLabel, nameLabel, helloLabel, idLabel, logoutButton, mainTableView, kickBoardTableView, historyTableView]
             .forEach { view.addSubview($0) }
         
         mainTableView.snp.makeConstraints {
@@ -130,7 +145,13 @@ extension MyPageViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
-        detailTableView.snp.makeConstraints {
+        kickBoardTableView.snp.makeConstraints {
+            $0.top.equalTo(mainTableView.snp.bottom)
+            $0.bottom.equalToSuperview().inset(110)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        historyTableView.snp.makeConstraints {
             $0.top.equalTo(mainTableView.snp.bottom)
             $0.bottom.equalToSuperview().inset(110)
             $0.leading.trailing.equalToSuperview()
@@ -170,7 +191,7 @@ extension MyPageViewController: UITableViewDelegate {
         if tableView == mainTableView {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyPageTableViewHeader.id) as? MyPageTableViewHeader else { return UIView() }
             
-            header.setState(state: historyData.fetchState())
+            header.setState(state: HistoryManager().fetchState())
             return header
             
         } else {
@@ -190,21 +211,29 @@ extension MyPageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == mainTableView {
             
-            if detailTableView.isHidden == true ||
-                selectedMainTableIndex == indexPath {
-                
-                detailTableView.isHidden.toggle()
-                
+            if indexPath.row == 0 {
+                kickBoardTableView.isHidden.toggle()
+                if !kickBoardTableView.isHidden,
+                   !historyTableView.isHidden {
+                    historyTableView.isHidden = true
+                }
+            } else {
+                historyTableView.isHidden.toggle()
+                if !kickBoardTableView.isHidden,
+                   !historyTableView.isHidden {
+                    kickBoardTableView.isHidden = true
+                }
             }
             
-            if detailTableView.isHidden {
+            if kickBoardTableView.isHidden,
+               historyTableView.isHidden {
                 selectedMainTableIndex = nil
             } else {
                 selectedMainTableIndex = indexPath
             }
             
             tableView.reloadData()
-            detailTableView.reloadData()
+            kickBoardTableView.reloadData()
         }
         
     }
@@ -223,13 +252,10 @@ extension MyPageViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == mainTableView {
             return 2
+        } else if tableView == kickBoardTableView {
+            return kickBoardData.count
         } else {
-            if selectedMainTableIndex?.row == 0 {
-                return CoreData.shared.readAllData().count
-            } else {
-                return historyData.fetchHistory().count
-            }
-            
+            return historyData.count
         }
     }
     
@@ -238,13 +264,23 @@ extension MyPageViewController: UITableViewDataSource {
         if tableView == mainTableView {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageMainTableViewCell.id, for: indexPath) as? MyPageMainTableViewCell else { return UITableViewCell() }
             
-            cell.cellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
+            cell.cellChanges(indexPath: indexPath,
+                             selected: selectedMainTableIndex,
+                             kickBoardData: kickBoardData,
+                             historyData: historyData)
             
             return cell
             
+        } else if tableView == kickBoardTableView {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageKickBoardTableViewCell.id, for: indexPath) as? MyPageKickBoardTableViewCell else { return UITableViewCell() }
+            
+            cell.cellChanges(indexPath: indexPath, kickBoardData: kickBoardData)
+            
+            return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageDetailTableViewCell.id, for: indexPath) as? MyPageDetailTableViewCell else { return UITableViewCell() }
-            cell.cellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageHistoryTableViewCell.id, for: indexPath) as? MyPageHistoryTableViewCell else { return UITableViewCell() }
+            
+            cell.cellChanges(indexPath: indexPath, historyData: historyData)
             
             return cell
         }

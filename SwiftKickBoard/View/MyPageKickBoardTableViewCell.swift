@@ -8,11 +8,9 @@
 import UIKit
 import SnapKit
 
-class MyPageDetailTableViewCell: UITableViewCell {
+class MyPageKickBoardTableViewCell: UITableViewCell {
     
-    static let id = "MyPageDetailTableViewCell"
-    private var kickBoardData: [KickBoard] = []
-    private var historyData: [[String]] = []
+    static let id = "MyPageKickBoardTableViewCell"
     
     let leadingLabel: UILabel = {
         let label = UILabel()
@@ -46,25 +44,13 @@ class MyPageDetailTableViewCell: UITableViewCell {
         trailingLabel.text = nil
     }
     
-    func cellChanges(indexPath: IndexPath, selected: IndexPath?) {
+    func cellChanges(indexPath: IndexPath, kickBoardData: [KickBoard]) {
         
-        if let selected {
-            kickBoardData = CoreData.shared.readAllData()
-            let lat = String(format: "%.2f", kickBoardData[indexPath.row].lat)
-            let lon = String(format: "%.2f", kickBoardData[indexPath.row].lon)
-            
-            historyData = HistoryManager().fetchHistory()
-            
-            if selected.row == 0 {
-                self.leadingLabel.text = "ID: #\(kickBoardData[indexPath.row].id)"
-                self.trailingLabel.text = "(\(lat)), (\(lon))"
-                
-            } else {
-                self.leadingLabel.text = historyData[indexPath.row][0]
-                self.trailingLabel.text = historyData[indexPath.row][1]
-                
-            }
-        }
+        let lat = String(format: "%.2f", kickBoardData[indexPath.row].lat)
+        let lon = String(format: "%.2f", kickBoardData[indexPath.row].lon)
+        
+        self.leadingLabel.text = "ID: #\(kickBoardData[indexPath.row].id)"
+        self.trailingLabel.text = "(\(lat)), (\(lon))"
         
     }
     
