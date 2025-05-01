@@ -64,6 +64,11 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
+    
+    // 키보드 옵저버 삭제
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -73,6 +78,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         displayKickBoardMarkers()
         detailView.isHidden = true
         overlayView.isHidden = true
+        setupKeyboardObservers()
     }
 
     // 지도 초기화
@@ -166,6 +172,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
 
     // 주소 입력 후 검색 시 위치 이동
     @objc private func searchAddress() {
+        view.endEditing(true)
         guard let keyword = addressTextField.text, !keyword.isEmpty else { return }
 
         let geocoder = CLGeocoder()
@@ -187,9 +194,38 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
             self.mapView.moveCamera(cameraUpdate)
         }
     }
+    
+    // 키보드 옵저버 생성
+    private func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+    }
+    
+    // 키보드가 올라오면 실행되는 메서드
+    @objc private func keyboardWillShow() {
+        self.view.bringSubviewToFront(self.overlayView)
+        self.overlayView.isHidden = false
+        print("keyboardWillShow")
+    }
+    
+    // 키보드가 들어갈 때 실행되는 메서드
+    @objc private func keyboardWillHide() {
+        overlayView.isHidden = true
+    }
 
     // 터치 시 상세창 닫기
     @objc private func handleOverlayTap(_ sender: UITapGestureRecognizer) {
+        view.endEditing(true)
         let location = sender.location(in: self.view)
 
         if !detailView.frame.contains(location) {
