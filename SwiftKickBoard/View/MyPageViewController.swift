@@ -105,6 +105,7 @@ extension MyPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.mainTableView.isScrollEnabled = false
         guard let myInfo = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
         nameLabel.text = myInfo[0]
         idLabel.text = myInfo[1]
@@ -121,6 +122,7 @@ extension MyPageViewController {
         self.navigationController?.navigationBar.isHidden = true
         self.mainTableView.reloadData()
         self.kickBoardTableView.reloadData()
+        self.historyTableView.reloadData()
     }
     
 }
