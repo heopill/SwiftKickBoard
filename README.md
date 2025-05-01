@@ -120,6 +120,18 @@
 - UI/UX 디자인 제작에 사용 → <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=Figma&logoColor=white"/>  
 
 <br/>
+
+## 🛠 기술 스택
+
+- **iOS**: 16.6  
+- **Xcode**: 16  
+- **Language**: Swift 5  
+- **UI Framework**: UIKit  
+- **Layout**: SnapKit  
+- **Networking**: Alamofire  
+- **Local Data Persistence**: CoreData, UserDefaults
+
+<br/>
   
 ## 🌳 브랜치 구조
 ```
@@ -161,8 +173,8 @@ main                  ← 최종 배포 브랜치
 ## 📱 오더ㅋ 목업 이미지
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/05a44b1b-fe08-4c50-ad43-d45279aa6936" width="45%"/>
-  <img src="https://github.com/user-attachments/assets/6bff2211-fb9d-4052-b421-590a804d634d" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/eaac6d80-4676-479c-92c3-a3a982753127" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/ae97e746-5990-4f90-9d46-936c03e45e9f" width="45%"/>
 </p>
 
 
