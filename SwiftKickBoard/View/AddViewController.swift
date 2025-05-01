@@ -10,11 +10,12 @@ import SnapKit
 import CoreData
 import NMapsMap
 
-class AddViewController: UIViewController {
+class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapViewTouchDelegate {
     
     var container: NSPersistentContainer!
     var kickBoardData: [KickBoardModel] = []
     var coredata = CoreData.shared
+    let locationManager = CLLocationManager()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -27,51 +28,18 @@ class AddViewController: UIViewController {
     lazy var mapView: NMFMapView = {
         
         let mapView = NMFMapView(frame: self.view.frame)
-        
-        let cameraPosition = NMFCameraPosition(
-            NMGLatLng(lat: 37.557116, lng: 126.924353), // 좌표
-            zoom: 15.0,    // 줌 레벨
-            tilt: 0.0,     // 기울기 (tilt)
-            heading: 0.0      // 방향 (bearing)
-        )
-        
-        let cameraUpdate = NMFCameraUpdate(position: cameraPosition)
-        mapView.moveCamera(cameraUpdate)
-        
-        //        let marker = NMFMarker()
-        //        marker.position = NMGLatLng(lat: 37.557175, lng: 126.924574)
-        //        marker.iconImage = NMFOverlayImage(name: "markerImage")
-        //        marker.mapView = mapView
-        //
-        //        let marker2 = NMFMarker()
-        //        marker2.position = NMGLatLng(lat: 37.556520, lng: 126.922885)
-        //        marker2.iconImage = NMFOverlayImage(name: "markerImage")
-        //        marker2.mapView = mapView
-        //
-        //        let marker3 = NMFMarker()
-        //        marker3.position = NMGLatLng(lat: 37.556154, lng: 126.925167)
-        //        marker3.iconImage = NMFOverlayImage(name: "markerImage")
-        //        marker3.mapView = mapView
+        mapView.touchDelegate = self
         
         return mapView
     }()
     
-    private let xLabel: UILabel = {
-        let label = UILabel()
-        label.text = "X"
-        label.font = Nanum.bold(24)
-        label.textColor = UIColor(red: 148/255.0,
-                                  green: 148/255.0,
-                                  blue: 148/255.0,
-                                  alpha: 1)
-        
-        return label
-    }()
-    
     private let xTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "위도"
-        textField.font = Nanum.light(24)
+        textField.font = Nanum.light(18)
+        textField.textColor = UIColor(red: 148/255.0,
+                                      green: 148/255.0,
+                                      blue: 148/255.0,
+                                      alpha: 1)
         return textField
     }()
     
@@ -86,23 +54,13 @@ class AddViewController: UIViewController {
         return underLine
     }()
     
-    
-    private let yLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Y"
-        label.font = Nanum.bold(24)
-        label.textColor = UIColor(red: 148/255.0,
-                                  green: 148/255.0,
-                                  blue: 148/255.0,
-                                  alpha: 1)
-        
-        return label
-    }()
-    
     private let yTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "경도"
-        textField.font = Nanum.light(24)
+        textField.font = Nanum.light(18)
+        textField.textColor = UIColor(red: 148/255.0,
+                                      green: 148/255.0,
+                                      blue: 148/255.0,
+                                      alpha: 1)
         return textField
     }()
     
@@ -123,7 +81,16 @@ class AddViewController: UIViewController {
         button.backgroundColor = UIColor.main.withAlphaComponent(0.5)
         button.setTitleColor(.black, for: .normal)
         button.layer.cornerRadius = 15
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchDown)
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchDown)
+        return button
+    }()
+    
+    // GPS 버튼
+    lazy var gpsButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "GPS"), for: .normal)
+        button.tintColor = .systemMint
+        button.addTarget(self, action: #selector(gpsButtonTapped), for:     .touchDown)
         return button
     }()
     
@@ -131,6 +98,10 @@ class AddViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -142,7 +113,12 @@ class AddViewController: UIViewController {
         
         view.backgroundColor = .white
         
-        [titleLabel, mapView, xLabel, yLabel, xUnderLine, yUnderLine, xTextField, yTextField,addButton,].forEach {
+        xTextField.attributedPlaceholder = NSAttributedString(string: "위도", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        
+        yTextField.attributedPlaceholder = NSAttributedString(string: "경도", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        
+        
+        [titleLabel, mapView, xUnderLine, yUnderLine, xTextField, yTextField, addButton, gpsButton].forEach {
             view.addSubview($0)
         }
         
@@ -155,54 +131,52 @@ class AddViewController: UIViewController {
             make.top.equalTo(titleLabel.snp.bottom).offset(24)
             make.leading.trailing.equalToSuperview()
             make.width.equalTo(402)
-            make.height.equalTo(344)
-        }
-        
-        xLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(51)
-            make.top.equalTo(mapView.snp.bottom).offset(45)
-            make.width.equalTo(18)
+            make.height.equalTo(450)
         }
         
         xTextField.snp.makeConstraints { make in
-            make.leading.equalTo(xLabel.snp.trailing).offset(10)
+            make.leading.equalToSuperview().offset(50)
             make.top.equalTo(mapView.snp.bottom).offset(45)
+            make.width.equalTo(137)
         }
         
         xUnderLine.snp.makeConstraints { make in
             make.height.equalTo(0.5)
             make.width.equalTo(137)
             make.leading.equalToSuperview().offset(44)
-            make.top.equalTo(xLabel.snp.bottom).offset(7)
+            make.top.equalTo(xTextField.snp.bottom).offset(7)
         }
-        
-        yLabel.snp.makeConstraints { make in
-            make.leading.equalTo(xLabel.snp.trailing).offset(146)
-            make.top.equalTo(mapView.snp.bottom).offset(45)
-            make.width.equalTo(18)
-        }
-        
+
         yTextField.snp.makeConstraints { make in
-            make.leading.equalTo(yLabel.snp.trailing).offset(10)
+            make.leading.equalTo(xTextField.snp.trailing).offset(28)
+            make.trailing.equalToSuperview().inset(50)
             make.top.equalTo(mapView.snp.bottom).offset(45)
+            make.width.equalTo(137)
         }
         
         yUnderLine.snp.makeConstraints { make in
             make.height.equalTo(0.5)
             make.width.equalTo(137)
             make.leading.equalTo(xUnderLine.snp.trailing).offset(27)
-            make.top.equalTo(yLabel.snp.bottom).offset(7)
+            make.top.equalTo(yTextField.snp.bottom).offset(7)
         }
         
         addButton.snp.makeConstraints { make in
-            make.top.equalTo(xUnderLine.snp.bottom).offset(62)
+            make.top.equalTo(xUnderLine.snp.bottom).offset(32)
             make.leading.equalToSuperview().offset(46)
             make.trailing.equalToSuperview().inset(46)
             make.height.equalTo(55)
         }
+        
+        gpsButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(10)
+            make.bottom.equalTo(mapView.snp.bottom).inset(10)
+            make.width.height.equalTo(30)
+        }
     }
     
-    @objc private func buttonTapped() {
+    // 등록하기 버튼 클릭 이벤트
+    @objc private func addButtonTapped() {
         print("등록하기 버튼 클릭")
         guard let xText = xTextField.text, let x = Double(xText) else { return }
         guard let yText = yTextField.text, let y = Double(yText) else { return }
@@ -213,11 +187,43 @@ class AddViewController: UIViewController {
         readData()
         
         displayKickBoardMarkers(on: mapView, with: kickBoardData)
+        
+        let alert = UIAlertController(title: "등록 완료", message: "\(nextId)번 킥보드가 등록되었습니다!", preferredStyle: .alert)
+        
+        present(alert, animated: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            alert.dismiss(animated: true)
+        }
+        
+        xTextField.text = nil
+        yTextField.text = nil
+    }
+    
+    // gps 버튼 클릭 이벤트
+    @objc func gpsButtonTapped() {
+        print("gps 버튼 클릭")
+        guard let location = locationManager.location else { return }
+
+        let coord = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
+        let cameraUpdate = NMFCameraUpdate(position: NMFCameraPosition(coord, zoom: 16, tilt: 0, heading: 0))
+        cameraUpdate.animation = .easeIn
+
+        mapView.moveCamera(cameraUpdate)
+
+        mapView.locationOverlay.location = coord
+        mapView.locationOverlay.hidden = false
     }
     
     // 화면 아무곳이나 터치하면 키보드가 내려감
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.self.endEditing(true)
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if manager.authorizationStatus == .authorizedWhenInUse {
+            locationManager.startUpdatingLocation()
+        }
     }
     
     // 지도에 마커를 추가하는 함수
@@ -230,6 +236,7 @@ class AddViewController: UIViewController {
         }
     }
     
+    // 데이터를 읽어오고 배열에 저장
     private func readData() {
         kickBoardData = []
         let kickBoard = coredata.readAllData()
@@ -237,9 +244,18 @@ class AddViewController: UIViewController {
         for data in kickBoard {
             kickBoardData.append(KickBoardModel(id: Int(data.id),lat: data.lat, lon: data.lon))
         }
+    }
+    
+    // 지도를 클릭하면 호출되는 델리게이트 메서드
+    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+        let lat = latlng.lat
+        let lon = latlng.lng
         
+        print("지도 클릭 : 위도 \(lat), 경도 \(lon)")
+        
+        xTextField.text = "\(lat)"
+        yTextField.text = "\(lon)"
     }
     
 }
-
 

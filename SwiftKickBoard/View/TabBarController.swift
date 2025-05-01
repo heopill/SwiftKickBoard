@@ -12,7 +12,7 @@ import SnapKit
 class TabBarController: UIViewController {
     
     private var selectedIndex = 0
-    private var tabBarItems: [UIButton] = []
+    private var tabBarItems: [CustomTabBarButton] = []
     private var viewControllers: [UIViewController] = []
     
     private let tabBar: UIView = {
@@ -23,26 +23,36 @@ class TabBarController: UIViewController {
         return view
     }()
     
-    private let mainViewButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "map"), for: .normal)
+    private let mainViewButton: CustomTabBarButton = {
+        let defaultImage = UIImage(named: "map")
+        let selectedImage = UIImage(named: "mapWhite")
+        let button = CustomTabBarButton(defaultImage: defaultImage, selectedImage: selectedImage)
         
         return button
     }()
     
-    private let addViewButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "add"), for: .normal)
+    private let addViewButton: CustomTabBarButton = {
+        let defaultImage = UIImage(named: "add")
+        let selectedImage = UIImage(named: "addWhite")
+        let button = CustomTabBarButton(defaultImage: defaultImage, selectedImage: selectedImage)
         
         return button
     }()
     
-    private let myPageViewButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "mypage"), for: .normal)
+    private let myPageViewButton: CustomTabBarButton = {
+        let defaultImage = UIImage(named: "mypage")
+        let selectedImage = UIImage(named: "mypageWhite")
+        let button = CustomTabBarButton(defaultImage: defaultImage, selectedImage: selectedImage)
         
         return button
     }()
+    
+    func hideTabBar() {
+        tabBar.isHidden = true
+    }
+    func showTabBar() {
+        tabBar.isHidden = false
+    }
 }
 
 // MARK: - Lifecycle
@@ -81,6 +91,9 @@ extension TabBarController {
         
         removeView(selectedIndex)
         attchView(sender.tag)
+        
+        tabBarItems[selectedIndex].buttonIsSelected = false
+        tabBarItems[sender.tag].buttonIsSelected = true
         
         self.selectedIndex = sender.tag
     }
@@ -130,3 +143,5 @@ extension TabBarController {
         }
     }
 }
+
+

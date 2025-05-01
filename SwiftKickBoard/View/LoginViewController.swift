@@ -12,6 +12,7 @@ import SnapKit
 class LoginViewController: UIViewController {
     
     private let login = LoginManager()
+    let launchView = LaunchView()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -179,6 +180,17 @@ extension LoginViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        launchView.frame = view.bounds
+        view.addSubview(launchView)
+        
+        // 여기서 맨 앞의 뷰로 확실히 지정해줌
+        view.bringSubviewToFront(launchView)
+        
+        // 현재에서 2초 후에 dismiss되게 세팅
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.dismissLaunchView()
+        }
+        
         if UserDefaults.standard.bool(forKey: "autoLogin") {
             guard let lastID = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
             
@@ -270,7 +282,16 @@ extension LoginViewController {
         }
     }
     
-    @objc private func autoLoginButtonTapped(_ sender: UIButton) {
+    // LaunchView를 사라지게 하는 함수
+    func dismissLaunchView() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.launchView.alpha = 0
+        }) { _ in
+            self.launchView.removeFromSuperview()
+        }
+    }
+    
+    @objc func autoLoginButtonTapped(_ sender: UIButton) {
         sender.isSelected.toggle()
     }
     
