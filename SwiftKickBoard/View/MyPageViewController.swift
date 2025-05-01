@@ -12,7 +12,8 @@ import SnapKit
 class MyPageViewController: UIViewController {
     
     var selectedMainTableIndex: IndexPath?
-    private let state = HistoryManager()
+    private var detailTableViewCount = 0
+    private let historyData = HistoryManager()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -105,10 +106,6 @@ extension MyPageViewController {
         self.navigationController?.navigationBar.isHidden = true
         self.mainTableView.reloadData()
         self.detailTableView.reloadData()
-        
-        mainTableView.beginUpdates()
-        mainTableView.reloadSections(IndexSet(integer: 0), with: .none)
-        mainTableView.endUpdates()
     }
     
 }
@@ -173,8 +170,7 @@ extension MyPageViewController: UITableViewDelegate {
         if tableView == mainTableView {
             guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyPageTableViewHeader.id) as? MyPageTableViewHeader else { return UIView() }
             
-            header.setState(state: state.fetchState())
-            header.setHeaderText()
+            header.setState(state: historyData.fetchState())
             return header
             
         } else {
@@ -228,7 +224,12 @@ extension MyPageViewController: UITableViewDataSource {
         if tableView == mainTableView {
             return 2
         } else {
-            return CoreData.shared.readAllData().count
+            if selectedMainTableIndex?.row == 0 {
+                return CoreData.shared.readAllData().count
+            } else {
+                return historyData.fetchHistory().count
+            }
+            
         }
     }
     

@@ -37,6 +37,7 @@ class MyPageTableViewHeader: UITableViewHeaderFooterView {
         super.init(reuseIdentifier: reuseIdentifier)
         
         setUpUI()
+        setHeaderText()
     }
     
     func setHeaderText() {

@@ -12,6 +12,7 @@ class MyPageMainTableViewCell: UITableViewCell {
     
     static let id = "MyPageMainTableViewCell"
     private var kickBoardData: [KickBoard] = []
+    private var historyData: [[String]] = []
     
     let titleIcon: UIImageView = {
         let image = UIImageView()
@@ -58,6 +59,7 @@ class MyPageMainTableViewCell: UITableViewCell {
     
     func cellChanges(indexPath: IndexPath, selected: IndexPath?) {
         kickBoardData = CoreData.shared.readAllData()
+        historyData = HistoryManager().fetchHistory()
         
         if indexPath.row == 0 {
             self.titleIcon.image = UIImage(named: "kickboard")
@@ -67,7 +69,7 @@ class MyPageMainTableViewCell: UITableViewCell {
         } else if indexPath.row == 1 {
             self.titleIcon.image = UIImage(named: "history")
             self.titleLabel.text = "이용내역"
-            self.countLabel.text = "~건"
+            self.countLabel.text = "\(historyData.count)건"
             
         }
         
