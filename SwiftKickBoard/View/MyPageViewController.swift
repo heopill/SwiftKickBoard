@@ -102,6 +102,8 @@ extension MyPageViewController {
         super.viewWillAppear(animated)
         
         self.navigationController?.navigationBar.isHidden = true
+        self.mainTableView.reloadData()
+        self.detailTableView.reloadData()
     }
     
 }

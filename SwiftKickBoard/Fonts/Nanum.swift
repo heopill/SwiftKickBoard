@@ -14,4 +14,8 @@ final class Nanum {
     static let bold = { size in
         return UIFont(name: "NanumSquareNeoTTF-cBd", size: size)
     }
+    
+    static let heavy = { size in
+        return UIFont(name: "NanumSquareNeoTTF-eHv", size: size)
+    }
 }
