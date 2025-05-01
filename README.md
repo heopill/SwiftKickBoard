@@ -170,7 +170,7 @@ main                  ← 최종 배포 브랜치
 
 <br/>
 
-## 📱 오더ㅋ 목업 이미지
+## 📱 SWIFT 목업 이미지
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/eaac6d80-4676-479c-92c3-a3a982753127" width="45%"/>
