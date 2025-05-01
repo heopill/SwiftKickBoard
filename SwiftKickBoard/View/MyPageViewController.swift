@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - MyPageViewController
 class MyPageViewController: UIViewController {
     
     var selectedMainTableIndex: IndexPath?
@@ -99,7 +98,6 @@ class MyPageViewController: UIViewController {
     
 }
 
-// MARK: - Lifecycle
 extension MyPageViewController {
     
     override func viewDidLoad() {
@@ -127,7 +125,6 @@ extension MyPageViewController {
     
 }
 
-// MARK: - Method
 extension MyPageViewController {
     
     @objc private func logoutButtonTapped(_ sender: UIButton) {
@@ -183,9 +180,7 @@ extension MyPageViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(60)
         }
-        
     }
-    
 }
 
 extension MyPageViewController: UITableViewDelegate {
@@ -237,9 +232,7 @@ extension MyPageViewController: UITableViewDelegate {
             tableView.reloadData()
             kickBoardTableView.reloadData()
         }
-        
     }
-    
 }
 
 extension MyPageViewController: UITableViewDataSource {

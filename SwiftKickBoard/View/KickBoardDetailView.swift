@@ -10,6 +10,7 @@ class KickBoardDetailView: UIView {
 
     private let state = HistoryManager()
 
+    // UI 컴포넌트
     private let idLabel = UILabel()
     private let kmLabel = UILabel()
     private let likeButton = UIButton()
@@ -45,7 +46,7 @@ class KickBoardDetailView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupSubviews() {
+    private func setupSubviews() { // UI 요소 초기화 및 제약 설정
         idLabel.font = Nanum.bold(16) ?? .boldSystemFont(ofSize: 16)
         idLabel.textColor = .gray
         idLabel.text = "#1"
@@ -161,11 +162,11 @@ class KickBoardDetailView: UIView {
         }
     }
 
-    @objc private func didTapRentButton() {
+    @objc private func didTapRentButton() { //대여버튼 눌렀을 때
         actionButtonTapped?()
     }
 
-    @objc private func didTapReturnButton() {
+    @objc private func didTapReturnButton() { //반납버튼 눌렀을 때
         guard let start = rentalStartTime else { return }
 
         let interval = Int(Date().timeIntervalSince(start))
@@ -207,7 +208,7 @@ class KickBoardDetailView: UIView {
         return nil
     }
 
-    func updateStatus(_ status: KickBoardStatus) {
+    func updateStatus(_ status: KickBoardStatus) { //상태 업데이트
         switch status {
         case .available:
             kmLabel.text = "100Km 주행 가능"
@@ -231,14 +232,14 @@ class KickBoardDetailView: UIView {
         print("현재 대여상태: \(state.fetchState())")
     }
 
-    private func startRentalTimer() {
+    private func startRentalTimer() { //타이머 갱신
         rentalTimer?.invalidate()
         rentalTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.updateRentalTime()
         }
     }
 
-    private func updateRentalTime() {
+    private func updateRentalTime() { //텍스트로 시간 갱신
         guard let start = rentalStartTime else { return }
 
         let interval = Int(Date().timeIntervalSince(start))
