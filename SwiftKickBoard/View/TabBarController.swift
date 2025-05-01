@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-// MARK: - TabBarController
 class TabBarController: UIViewController {
     
     private var selectedIndex = 0
@@ -46,16 +45,8 @@ class TabBarController: UIViewController {
         
         return button
     }()
-    
-    func hideTabBar() {
-        tabBar.isHidden = true
-    }
-    func showTabBar() {
-        tabBar.isHidden = false
-    }
 }
 
-// MARK: - Lifecycle
 extension TabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +74,6 @@ extension TabBarController {
     }
 }
 
-// MARK: - Method
 extension TabBarController {
     
     @objc private func tabBarButtonTapped(_ sender: UIButton) {
@@ -142,6 +132,12 @@ extension TabBarController {
             $0.trailing.equalToSuperview().inset(20)
         }
     }
+    func hideTabBar() {
+        print("tabBar hide")
+        tabBar.isHidden = true
+    }
+    func showTabBar() {
+        print("tabBar show")
+        tabBar.isHidden = false
+    }
 }
-
-

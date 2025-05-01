@@ -3,8 +3,8 @@ import SnapKit
 
 class KickBoardDetailView: UIView {
 
-    private let numberLabel = UILabel()
-    private let kmLabel = UILabel()
+    private let titleLabel = UILabel()
+    private let detailLabel = UILabel()
     private let likeButton = UIButton()
     private let likeLabel = UILabel()
     private let priceBox = UIView()
@@ -32,62 +32,58 @@ class KickBoardDetailView: UIView {
 
     private func setupSubviews() {
         // Title
-        numberLabel.font = .boldSystemFont(ofSize: 16)
-        numberLabel.textColor = .gray
-        numberLabel.text = "#0001"
+        titleLabel.font = .boldSystemFont(ofSize: 16)
+        titleLabel.textColor = .gray
+        titleLabel.text = "#0001"
 
-        // Distance Info
-        kmLabel.font = .systemFont(ofSize: 14)
-        kmLabel.textColor = .gray
-        kmLabel.text = "@@Km 주행 가능"
+        detailLabel.font = .systemFont(ofSize: 14)
+        detailLabel.textColor = .gray
+        detailLabel.text = "@@Km 주행 가능"
 
-        // Like Button
+        // 찜하기 버튼 + 라벨
         likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         likeButton.tintColor = .black
         likeButton.imageView?.contentMode = .scaleAspectFit
-        
+
         likeLabel.text = "찜하기"
         likeLabel.font = .systemFont(ofSize: 12)
-        likeLabel.textAlignment = .center
         likeLabel.textColor = .darkGray
+        likeLabel.textAlignment = .center
 
-        // Price Box
-        priceBox.backgroundColor = UIColor.black
+        // 가격 박스
+        priceBox.backgroundColor = UIColor.systemGray6
         priceBox.layer.cornerRadius = 12
 
         unlockLabel.text = "잠금해제 500원"
         unlockLabel.font = .systemFont(ofSize: 14)
-
         feeLabel.text = "분당요금 150원"
         feeLabel.font = .systemFont(ofSize: 14)
 
-        // Bell Button
+        // 하단 버튼
         bellButton.setImage(UIImage(systemName: "bell"), for: .normal)
         bellButton.tintColor = .white
         bellButton.backgroundColor = .black
         bellButton.layer.cornerRadius = 24
 
-        // Rent Button
         rentButton.setTitle("이 기기 대여하기", for: .normal)
-        rentButton.backgroundColor = .black
         rentButton.setTitleColor(.white, for: .normal)
-        rentButton.layer.cornerRadius = 24
+        rentButton.backgroundColor = .black
         rentButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        rentButton.layer.cornerRadius = 24
 
-        // Add subviews
-        [numberLabel, kmLabel, likeButton, likeLabel, priceBox, bellButton, rentButton].forEach { addSubview($0) }
+        // addSubview
+        [titleLabel, detailLabel, likeButton, likeLabel, priceBox, bellButton, rentButton].forEach { addSubview($0) }
         [unlockLabel, feeLabel].forEach { priceBox.addSubview($0) }
 
-        // Constraints
         
-        numberLabel.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(20)
             make.leading.equalToSuperview().offset(20)
         }
         
-        kmLabel.snp.makeConstraints { make in
-            make.top.equalTo(numberLabel.snp.bottom).offset(4)
-            make.leading.equalTo(numberLabel)
+        detailLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.equalTo(titleLabel)
         }
         
         likeButton.snp.makeConstraints { make in
@@ -101,8 +97,9 @@ class KickBoardDetailView: UIView {
             make.centerX.equalTo(likeButton)
         }
 
+
         priceBox.snp.makeConstraints { make in
-            make.top.equalTo(kmLabel.snp.bottom).offset(50)
+            make.top.equalTo(detailLabel.snp.bottom).offset(50)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(60)
         }
@@ -125,8 +122,8 @@ class KickBoardDetailView: UIView {
 
         rentButton.snp.makeConstraints { make in
             make.centerY.equalTo(bellButton)
-            make.trailing.equalToSuperview().inset(20)
-            make.leading.equalTo(bellButton.snp.trailing).offset(21)
+            make.leading.equalTo(bellButton.snp.trailing).offset(20)
+            make.trailing.equalToSuperview().inset(21)
             make.height.equalTo(48)
         }
     }

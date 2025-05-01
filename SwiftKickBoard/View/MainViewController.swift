@@ -8,13 +8,14 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
 
     let locationManager = CLLocationManager()
     var mapView: NMFMapView!
-    
+
     var kickBoardData: [KickBoardModel] = []
     var kickBoardMarkers: [NMFMarker] = []
-    
+
     let coredata = CoreData.shared
     private let detailView = KickBoardDetailView()
-
+    private let overlayView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,7 +23,8 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         setupLogoLabel()
         setupGPSButton()
         setupDetailView()
-
+        setupOverlayView()
+        
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
@@ -31,14 +33,12 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         readKickBoardData()
         displayKickBoardMarkers()
         detailView.isHidden = true
-        
-        if let nav = self.parent as? UINavigationController,
-           let tabBarVC = nav.parent as? TabBarController {
-            tabBarVC.showTabBar()
-        }
+        overlayView.isHidden = true
+
     }
 
     private func setupMapView() {
@@ -52,13 +52,13 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         let logoLabel = UILabel()
         logoLabel.text = "SWIFT"
         logoLabel.font = Nanum.bold(36)
-        logoLabel.textColor = .systemMint
+        logoLabel.textColor = UIColor.main
         logoLabel.textAlignment = .center
         logoLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoLabel)
 
         NSLayoutConstraint.activate([
-            logoLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -30),
+            logoLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -2),
             logoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -82,14 +82,43 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
     private func setupDetailView() {
         view.addSubview(detailView)
         detailView.isHidden = true
-        
+
         detailView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(280)
         }
     }
+
+
+    private func setupOverlayView() {
+        overlayView.backgroundColor = .clear
+        overlayView.isHidden = true
+        view.addSubview(overlayView)
+        
+        overlayView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleOverlayTap))
+        overlayView.addGestureRecognizer(tapGesture)
+    }
     
-    @objc func gpsButtonTapped() {
+    @objc
+    private func handleOverlayTap(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: self.view)
+        
+        if !detailView.frame.contains(location) {
+            print("화면 터치 감지")
+            detailView.isHidden = true
+            overlayView.isHidden = true
+            
+            if let tabBarVC = self.parent as? TabBarController {
+                tabBarVC.showTabBar()
+            }
+        }
+    }
+    
+    @objc
+    func gpsButtonTapped() {
         guard let location = locationManager.location else { return }
 
         let coord = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
@@ -97,7 +126,6 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         cameraUpdate.animation = .easeIn
 
         mapView.moveCamera(cameraUpdate)
-
         mapView.locationOverlay.location = coord
         mapView.locationOverlay.hidden = false
     }
@@ -117,36 +145,39 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
     }
 
     private func displayKickBoardMarkers() {
-        
         kickBoardMarkers.forEach { $0.mapView = nil }
         kickBoardMarkers.removeAll()
-        
+
         for kickBoard in kickBoardData {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: kickBoard.lat, lng: kickBoard.lon)
             marker.iconImage = NMFOverlayImage(name: "markerImage")
             marker.mapView = mapView
-            
+
             marker.touchHandler = { [weak self] overlay -> Bool in
-                guard let self = self else {return false}
+                guard let self = self else { return false }
+
+                print(" 상세창 표시 ")
                 
                 self.detailView.isHidden = false
+                self.overlayView.isHidden = false
+
+                self.view.bringSubviewToFront(self.overlayView)
                 self.view.bringSubviewToFront(self.detailView)
                 
-                if let nav = self.parent as? UINavigationController,
-                   let tabBarVC = nav.parent as? TabBarController {
+                if let tabBarVC = self.parent as? TabBarController {
                     tabBarVC.hideTabBar()
                 }
+
                 return true
             }
             kickBoardMarkers.append(marker)
         }
     }
-    
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
         let currentZoom = mapView.zoomLevel
         let threshold: Double = 14
-        
+
         for marker in kickBoardMarkers {
             marker.mapView = currentZoom >= threshold ? mapView : nil
         }
