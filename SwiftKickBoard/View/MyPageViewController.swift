@@ -16,7 +16,7 @@ class MyPageViewController: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "SWIFT"
-        label.font = Nanum.bold(36)
+        label.font = Nanum.heavy(36)
         label.textColor = .main
         
         return label
