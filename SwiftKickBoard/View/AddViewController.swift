@@ -106,6 +106,9 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
         readData()
         displayKickBoardMarkers(on: mapView, with: kickBoardData)
     }

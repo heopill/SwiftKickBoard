@@ -34,6 +34,7 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.navigationController?.navigationBar.isHidden = true
         readKickBoardData()
         displayKickBoardMarkers()
         detailView.isHidden = true
