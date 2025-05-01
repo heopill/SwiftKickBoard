@@ -16,6 +16,7 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     var kickBoardData: [KickBoardModel] = []
     var coredata = CoreData.shared
     let locationManager = CLLocationManager()
+    let tempMarker = NMFMarker()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -228,6 +229,8 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     
     // 지도에 마커를 추가하는 함수
     private func displayKickBoardMarkers(on mapView: NMFMapView, with data: [KickBoardModel]) {
+        tempMarker.mapView = nil
+        
         for kickBoard in data {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: kickBoard.lat, lng: kickBoard.lon)
@@ -255,6 +258,11 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
         
         xTextField.text = "\(lat)"
         yTextField.text = "\(lon)"
+        
+        tempMarker.position = NMGLatLng(lat: lat, lng: lon)
+        tempMarker.iconImage = NMFOverlayImage(name: "tempMarkerImage")
+        tempMarker.anchor = CGPoint(x: -1, y: -1)
+        tempMarker.mapView = mapView
     }
     
 }
