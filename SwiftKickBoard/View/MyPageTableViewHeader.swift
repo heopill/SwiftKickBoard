@@ -39,7 +39,7 @@ class MyPageTableViewHeader: UITableViewHeaderFooterView {
     func setHeaderText(title: String, highlight: String) {
         
         let attribute = NSMutableAttributedString(string: title)
-        attribute.addAttributes([.font: Nanum.bold(34) as Any], range: (title as NSString).range(of: highlight))
+        attribute.addAttributes([.font: Nanum.heavy(34) as Any], range: (title as NSString).range(of: highlight))
         attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: (title as NSString).range(of: highlight))
         
         defaultTextLabel.attributedText = attribute
