@@ -166,6 +166,13 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
                 self.view.bringSubviewToFront(self.overlayView)
                 self.view.bringSubviewToFront(self.detailView)
                 
+                self.detailView.configure(with: kickBoard)
+                
+                self.detailView.actionButtonTapped = {[weak self] in
+                    guard let self = self else {return}
+                    print("대여 버튼 눌림 감지")
+                    self.detailView.updateStatus(.rented)
+                }
                 if let tabBarVC = self.parent as? TabBarController {
                     tabBarVC.hideTabBar()
                 }
