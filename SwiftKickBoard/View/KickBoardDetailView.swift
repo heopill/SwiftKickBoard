@@ -7,7 +7,7 @@ class KickBoardDetailView: UIView {
         case available
         case rented
     }
-    
+
     private let state = HistoryManager()
 
     private let idLabel = UILabel()
@@ -68,6 +68,7 @@ class KickBoardDetailView: UIView {
 
         unlockLabel.text = "잠금해제 500원"
         unlockLabel.font = Nanum.light(14) ?? .systemFont(ofSize: 14)
+
         feeLabel.text = "분당요금 150원"
         feeLabel.font = Nanum.light(14) ?? .systemFont(ofSize: 14)
 
@@ -98,65 +99,65 @@ class KickBoardDetailView: UIView {
         [idLabel, kmLabel, likeButton, likeLabel, priceBox, bellButton, rentButton, statusLabel, returnButton].forEach { addSubview($0) }
         [unlockLabel, feeLabel].forEach { priceBox.addSubview($0) }
 
-        idLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
-            make.leading.equalToSuperview().offset(20)
+        idLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(20)
+            $0.leading.equalToSuperview().offset(20)
         }
 
-        kmLabel.snp.makeConstraints { make in
-            make.top.equalTo(idLabel.snp.bottom).offset(4)
-            make.leading.equalTo(idLabel)
+        kmLabel.snp.makeConstraints {
+            $0.top.equalTo(idLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(idLabel)
         }
 
-        likeButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().inset(24)
-            make.width.height.equalTo(36)
+        likeButton.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.width.height.equalTo(36)
         }
 
-        likeLabel.snp.makeConstraints { make in
-            make.top.equalTo(likeButton.snp.bottom).offset(-6)
-            make.centerX.equalTo(likeButton)
+        likeLabel.snp.makeConstraints {
+            $0.top.equalTo(likeButton.snp.bottom).offset(-6)
+            $0.centerX.equalTo(likeButton)
         }
 
-        priceBox.snp.makeConstraints { make in
-            make.top.equalTo(kmLabel.snp.bottom).offset(50)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(60)
+        priceBox.snp.makeConstraints {
+            $0.top.equalTo(kmLabel.snp.bottom).offset(50)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(60)
         }
 
-        unlockLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.leading.equalToSuperview().offset(12)
+        unlockLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(8)
+            $0.leading.equalToSuperview().offset(12)
         }
 
-        feeLabel.snp.makeConstraints { make in
-            make.top.equalTo(unlockLabel.snp.bottom).offset(4)
-            make.leading.equalTo(unlockLabel)
+        feeLabel.snp.makeConstraints {
+            $0.top.equalTo(unlockLabel.snp.bottom).offset(4)
+            $0.leading.equalTo(unlockLabel)
         }
 
-        bellButton.snp.makeConstraints { make in
-            make.top.equalTo(priceBox.snp.bottom).offset(25)
-            make.leading.equalToSuperview().offset(20)
-            make.width.height.equalTo(48)
+        bellButton.snp.makeConstraints {
+            $0.top.equalTo(priceBox.snp.bottom).offset(25)
+            $0.leading.equalToSuperview().offset(20)
+            $0.width.height.equalTo(48)
         }
 
-        rentButton.snp.makeConstraints { make in
-            make.centerY.equalTo(bellButton)
-            make.leading.equalTo(bellButton.snp.trailing).offset(20)
-            make.trailing.equalToSuperview().inset(21)
-            make.height.equalTo(48)
+        rentButton.snp.makeConstraints {
+            $0.centerY.equalTo(bellButton)
+            $0.leading.equalTo(bellButton.snp.trailing).offset(20)
+            $0.trailing.equalToSuperview().inset(21)
+            $0.height.equalTo(48)
         }
 
-        statusLabel.snp.makeConstraints { make in
-            make.top.equalTo(kmLabel.snp.bottom).offset(40)
-            make.trailing.equalTo(returnButton.snp.trailing)
+        statusLabel.snp.makeConstraints {
+            $0.top.equalTo(kmLabel.snp.bottom).offset(40)
+            $0.trailing.equalTo(returnButton.snp.trailing)
         }
 
-        returnButton.snp.makeConstraints { make in
-            make.top.equalTo(statusLabel.snp.bottom).offset(50)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(48)
+        returnButton.snp.makeConstraints {
+            $0.top.equalTo(statusLabel.snp.bottom).offset(50)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(48)
         }
     }
 
@@ -166,19 +167,44 @@ class KickBoardDetailView: UIView {
 
     @objc private func didTapReturnButton() {
         guard let start = rentalStartTime else { return }
-        
-        let interval = Int(Date().timeIntervalSince(start)) //대여 시간 계산
+
+        let interval = Int(Date().timeIntervalSince(start))
         let minutes = interval / 60
         let seconds = interval % 60
-        
-        let formattedTime = "\(minutes)분 \(seconds)초" // 경과 시간 포맷팅
+        let formattedTime = "\(minutes)분 \(seconds)초"
 
-        let formatter = DateFormatter() // 오늘날짜 포맷팅
+        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd"
         let today = formatter.string(from: Date())
-        
-        HistoryManager().updateHistory(date: today, runTime: formattedTime) //HistoryManager에 [날짜, 이용시간] 기록저장
-        updateStatus(.available)
+
+        let alert = UIAlertController(
+            title: "반납하시겠습니까?",
+            message: "이용시간 : \(formattedTime)",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+
+        alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            HistoryManager().updateHistory(date: today, runTime: formattedTime)
+            self.updateStatus(.available)
+        }))
+
+        if let viewController = findViewController() {
+            viewController.present(alert, animated: true, completion: nil)
+        }
+    }
+
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let r = responder {
+            if let vc = r as? UIViewController {
+                return vc
+            }
+            responder = r.next
+        }
+        return nil
     }
 
     func updateStatus(_ status: KickBoardStatus) {
@@ -201,7 +227,7 @@ class KickBoardDetailView: UIView {
             startRentalTimer()
             state.updateState(upState: true)
         }
-        
+
         print("현재 대여상태: \(state.fetchState())")
     }
 
