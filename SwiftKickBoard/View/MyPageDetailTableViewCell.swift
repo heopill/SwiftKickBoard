@@ -12,6 +12,7 @@ class MyPageDetailTableViewCell: UITableViewCell {
     
     static let id = "MyPageDetailTableViewCell"
     private var kickBoardData: [KickBoard] = []
+    private var historyData: [[String]] = []
     
     let leadingLabel: UILabel = {
         let label = UILabel()
@@ -52,12 +53,15 @@ class MyPageDetailTableViewCell: UITableViewCell {
             let lat = String(format: "%.2f", kickBoardData[indexPath.row].lat)
             let lon = String(format: "%.2f", kickBoardData[indexPath.row].lon)
             
+            historyData = HistoryManager().fetchHistory()
+            
             if selected.row == 0 {
                 self.leadingLabel.text = "ID: #\(kickBoardData[indexPath.row].id)"
                 self.trailingLabel.text = "(\(lat)), (\(lon))"
                 
             } else {
-                self.leadingLabel.text = "25.04.29"
+                self.leadingLabel.text = historyData[indexPath.row][0]
+                self.trailingLabel.text = historyData[indexPath.row][1]
                 
             }
         }
