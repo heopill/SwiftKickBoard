@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		676B998D2DC3D43F007DEF07 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 676B998C2DC3D43F007DEF07 /* KakaoSDKAuth */; };
+		676B998F2DC3D444007DEF07 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 676B998E2DC3D444007DEF07 /* KakaoSDKUser */; };
 		9301FDF92DC1F5F000FB87DD /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 9301FDF82DC1F5F000FB87DD /* NMapsMap */; };
 		BB40A47A2DBB62EC005826E0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = BB40A4792DBB62EC005826E0 /* SnapKit */; };
 		BB5B59CE2DBF5C3300FCE82F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB5B59CD2DBF5C3300FCE82F /* Alamofire */; };
@@ -49,6 +51,8 @@
 				BB40A47A2DBB62EC005826E0 /* SnapKit in Frameworks */,
 				9301FDF92DC1F5F000FB87DD /* NMapsMap in Frameworks */,
 				BB5B59CE2DBF5C3300FCE82F /* Alamofire in Frameworks */,
+				676B998F2DC3D444007DEF07 /* KakaoSDKUser in Frameworks */,
+				676B998D2DC3D43F007DEF07 /* KakaoSDKAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +108,8 @@
 				BB40A4792DBB62EC005826E0 /* SnapKit */,
 				BB5B59CD2DBF5C3300FCE82F /* Alamofire */,
 				9301FDF82DC1F5F000FB87DD /* NMapsMap */,
+				676B998C2DC3D43F007DEF07 /* KakaoSDKAuth */,
+				676B998E2DC3D444007DEF07 /* KakaoSDKUser */,
 			);
 			productName = SwiftKickBoard;
 			productReference = BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */;
@@ -137,6 +143,7 @@
 				BB40A4782DBB62EC005826E0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				BB5B59CC2DBF5C3300FCE82F /* XCRemoteSwiftPackageReference "Alamofire" */,
 				934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
+				676B998B2DC3D0CD007DEF07 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BB40A4462DBB5E48005826E0 /* Products */;
@@ -372,6 +379,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		676B998B2DC3D0CD007DEF07 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.1;
+			};
+		};
 		934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap.git";
@@ -399,6 +414,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		676B998C2DC3D43F007DEF07 /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 676B998B2DC3D0CD007DEF07 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		676B998E2DC3D444007DEF07 /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 676B998B2DC3D0CD007DEF07 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
+		};
 		9301FDF82DC1F5F000FB87DD /* NMapsMap */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 934D60902DC1F2D900B6FEE3 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
