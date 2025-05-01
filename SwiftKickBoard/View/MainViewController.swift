@@ -51,14 +51,14 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
     private func setupLogoLabel() {
         let logoLabel = UILabel()
         logoLabel.text = "SWIFT"
-        logoLabel.font = Nanum.bold(36)
+        logoLabel.font = Nanum.heavy(36)
         logoLabel.textColor = UIColor.main
         logoLabel.textAlignment = .center
         logoLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoLabel)
 
         NSLayoutConstraint.activate([
-            logoLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -2),
+            logoLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             logoLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }

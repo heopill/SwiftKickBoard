@@ -20,7 +20,7 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Nanum.bold(36)
+        label.font = Nanum.heavy(36)
         label.text = "SWIFT"
         label.textColor = UIColor.main
         return label
@@ -124,8 +124,8 @@ class AddViewController: UIViewController, CLLocationManagerDelegate, NMFMapView
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(141)
-            make.top.equalToSuperview().offset(60)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(60)
         }
         
         mapView.snp.makeConstraints { make in
