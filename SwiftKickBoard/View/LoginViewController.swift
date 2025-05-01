@@ -7,8 +7,10 @@
 
 import UIKit
 import SnapKit
+import AuthenticationServices
+import KakaoSDKAuth
+import KakaoSDKUser
 
-// MARK: - LoginViewController
 class LoginViewController: UIViewController {
     
     private let login = LoginManager()
@@ -159,7 +161,8 @@ class LoginViewController: UIViewController {
         apple.setImage(UIImage(named: "apple"), for: .normal)
         google.setImage(UIImage(named: "google"), for: .normal)
         kakao.setImage(UIImage(named: "kakao"), for: .normal)
-        [apple, google, kakao].forEach {
+        kakao.addTarget(self, action: #selector(handleKakaoLogin), for: .touchUpInside)
+        [apple, google].forEach {
             $0.addTarget(self, action: #selector(eazyLoginButtonTapped), for: .touchUpInside)
         }
         
@@ -171,9 +174,39 @@ class LoginViewController: UIViewController {
         return stackView
     }()
     
+    @objc func handleKakaoLogin() {
+        if UserApi.isKakaoTalkLoginAvailable() {
+            UserApi.shared.loginWithKakaoTalk { (oauthToken, error) in
+                if let error = error {
+                    print("카카오톡 로그인 실패 ❌: \(error.localizedDescription)")
+                } else {
+                    print("카카오톡 로그인 성공 ✅")
+                    self.navigateToMain()
+                }
+            }
+        } else {
+            UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
+                if let error = error {
+                    print("카카오 계정 로그인 실패 ❌: \(error.localizedDescription)")
+                } else {
+                    print("카카오 계정 로그인 성공 ✅")
+                    self.navigateToMain()
+                }
+            }
+        }
+    }
+    private func navigateToMain() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Kakao Login", message: "로그인 성공!", preferredStyle: .alert)
+            self.present(alert, animated: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                alert.dismiss(animated: true)
+                self.navigationController?.pushViewController(TabBarController(), animated: true)
+            }
+        }
+    }
 }
 
-// MARK: - Lifecycle
 extension LoginViewController {
 
     override func viewDidLoad() {
@@ -198,7 +231,6 @@ extension LoginViewController {
     
 }
 
-// MARK: - Method
 extension LoginViewController {
     
     private func setupUI() {
@@ -376,5 +408,4 @@ extension LoginViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
       view.self.endEditing(true)
     }
-    
 }
