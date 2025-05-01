@@ -39,7 +39,7 @@ class CoreData {
     func deleteData(id: Int) {
         // 삭제할 데이터를 찾기 위한 fetch request 생성
         let fetchRequest = KickBoard.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+        fetchRequest.predicate = NSPredicate(format: "id == %d", id)
         
         do {
             // fetch request 실행
