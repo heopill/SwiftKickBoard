@@ -8,9 +8,10 @@
 import UIKit
 import SnapKit
 
-class MainTableViewCell: UITableViewCell {
+class MyPageMainTableViewCell: UITableViewCell {
     
-    static let id = "MainTableViewCell"
+    static let id = "MyPageMainTableViewCell"
+    private var kickBoardData: [KickBoard] = []
     
     let titleIcon: UIImageView = {
         let image = UIImageView()
@@ -33,13 +34,6 @@ class MainTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let separaterView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        
-        return view
-    }()
-    
     private let clickIcon: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFit
@@ -49,39 +43,45 @@ class MainTableViewCell: UITableViewCell {
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: MainTableViewCell.id)
+        super.init(style: .default, reuseIdentifier: reuseIdentifier)
+        
+        setUpUI()
     }
     
     override func prepareForReuse() {
         titleIcon.image = nil
         titleLabel.text = nil
         countLabel.text = nil
-        clickIcon.image = nil
     }
     
-    func setupUIForDetailTableView() {
-        contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+
+    
+    func cellChanges(indexPath: IndexPath, selected: IndexPath?) {
+        kickBoardData = CoreData.shared.readAllData()
         
-        [titleLabel, separaterView]
-            .forEach { contentView.addSubview($0) }
-        
-        titleLabel.font = Nanum.light(24)
-        titleLabel.text = "#0000"
-        
-        titleLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().inset(20)
+        if indexPath.row == 0 {
+            self.titleIcon.image = UIImage(named: "kickboard")
+            self.titleLabel.text = "등록한 킥보드"
+            self.countLabel.text = "\(kickBoardData.count)개"
+            
+        } else if indexPath.row == 1 {
+            self.titleIcon.image = UIImage(named: "history")
+            self.titleLabel.text = "이용내역"
+            self.countLabel.text = "~건"
+            
         }
         
-        separaterView.snp.makeConstraints {
-            $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview().inset(8)
-            $0.bottom.equalToSuperview()
+        if indexPath == selected {
+            self.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
+            
+        } else {
+            self.contentView.backgroundColor = .black
+            
         }
         
     }
     
-    func setupUIForMainTableView() {
+    func setUpUI() {
         contentView.backgroundColor = .black
         
         titleLabel.font = Nanum.bold(24)

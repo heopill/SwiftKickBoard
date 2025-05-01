@@ -11,7 +11,7 @@ import SnapKit
 // MARK: - MyPageViewController
 class MyPageViewController: UIViewController {
     
-    private var selectedMainTableIndex: IndexPath?
+    var selectedMainTableIndex: IndexPath?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -56,6 +56,7 @@ class MyPageViewController: UIViewController {
         button.setAttributedTitle(attribute, for: .normal)
         button.titleLabel?.font = Nanum.bold(16)
         button.titleLabel?.textColor = UIColor(red: 148/255.0, green: 148/255.0, blue: 148/255.0, alpha: 1)
+        button.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -65,7 +66,8 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = .black
         table.delegate = self
         table.dataSource = self
-        table.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.id)
+        table.register(MyPageMainTableViewCell.self, forCellReuseIdentifier: MyPageMainTableViewCell.id)
+        table.register(MyPageTableViewHeader.self, forHeaderFooterViewReuseIdentifier: MyPageTableViewHeader.id)
         
         return table
     }()
@@ -75,7 +77,7 @@ class MyPageViewController: UIViewController {
         table.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
         table.delegate = self
         table.dataSource = self
-        table.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.id)
+        table.register(MyPageDetailTableViewCell.self, forCellReuseIdentifier: MyPageDetailTableViewCell.id)
         table.isHidden = true
         
         return table
@@ -89,14 +91,28 @@ extension MyPageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        guard let myInfo = UserDefaults.standard.array(forKey: "lastID") as? [String] else { return }
+        nameLabel.text = myInfo[0]
+        idLabel.text = myInfo[1]
+        
         setupUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
     }
     
 }
 
 // MARK: - Method
 extension MyPageViewController {
+    
+    @objc private func logoutButtonTapped(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+        UserDefaults.standard.set(false, forKey: "autoLogin")
+    }
     
     private func setupUI() {
         view.backgroundColor = .white
@@ -148,37 +164,11 @@ extension MyPageViewController {
 extension MyPageViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if tableView == mainTableView {
-            let header = UIView()
-            let defaultTextLabel = UILabel()
-            let stateTextLabel = UILabel()
+            guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: MyPageTableViewHeader.id) as? MyPageTableViewHeader else { return UIView() }
             
-            defaultTextLabel.textColor = .white
-            defaultTextLabel.font = Nanum.bold(22)
-            
-            let attribute = NSMutableAttributedString(string: "현재 SWIFT를")
-            attribute.addAttributes([.font: Nanum.bold(34) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
-            attribute.addAttributes([.foregroundColor: UIColor(.main) as Any], range: ("현재 SWIFT를" as NSString).range(of: "SWIFT"))
-            
-            defaultTextLabel.attributedText = attribute
-            
-            stateTextLabel.textColor = .main
-            stateTextLabel.font = Nanum.bold(22)
-            stateTextLabel.text = "이용 중"
-            
-            header.addSubview(defaultTextLabel)
-            header.addSubview(stateTextLabel)
-            
-            defaultTextLabel.snp.makeConstraints {
-                $0.centerY.equalToSuperview()
-                $0.leading.equalToSuperview().inset(20)
-            }
-            
-            stateTextLabel.snp.makeConstraints {
-                $0.bottom.equalTo(defaultTextLabel.snp.bottom)
-                $0.leading.equalTo(defaultTextLabel.snp.trailing).offset(8)
-            }
-            
+            header.setHeaderText(title: "현재 SWIFT를", highlight: "SWIFT")
             return header
+            
         } else {
             return nil
         }
@@ -195,10 +185,24 @@ extension MyPageViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == mainTableView {
-            selectedMainTableIndex = indexPath
+            
+            if detailTableView.isHidden == true ||
+                selectedMainTableIndex == indexPath {
+                
+                detailTableView.isHidden.toggle()
+                
+            }
+            
+            if detailTableView.isHidden {
+                selectedMainTableIndex = nil
+            } else {
+                selectedMainTableIndex = indexPath
+            }
+            
             tableView.reloadData()
-            detailTableView.isHidden = false
+            detailTableView.reloadData()
         }
+        
     }
     
 }
@@ -216,40 +220,26 @@ extension MyPageViewController: UITableViewDataSource {
         if tableView == mainTableView {
             return 2
         } else {
-            return 10
+            return CoreData.shared.readAllData().count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.id, for: indexPath) as? MainTableViewCell else { return UITableViewCell() }
         
         if tableView == mainTableView {
-            cell.setupUIForMainTableView()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageMainTableViewCell.id, for: indexPath) as? MyPageMainTableViewCell else { return UITableViewCell() }
             
-            if indexPath.row == 0 {
-                cell.titleIcon.image = UIImage(named: "kickboard")
-                cell.titleLabel.text = "등록한 킥보드"
-                cell.countLabel.text = "~개"
-                
-            } else if indexPath.row == 1 {
-                cell.titleIcon.image = UIImage(named: "history")
-                cell.titleLabel.text = "이용내역"
-                cell.countLabel.text = "~건"
-                
-            }
+            cell.cellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
             
-            if indexPath == selectedMainTableIndex {
-                cell.contentView.backgroundColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1)
-            } else {
-                cell.contentView.backgroundColor = .black
-            }
+            return cell
             
         } else {
-            cell.setupUIForDetailTableView()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageDetailTableViewCell.id, for: indexPath) as? MyPageDetailTableViewCell else { return UITableViewCell() }
+            cell.cellChanges(indexPath: indexPath, selected: selectedMainTableIndex)
             
+            return cell
         }
         
-        return cell
     }
     
     
