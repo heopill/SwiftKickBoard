@@ -17,18 +17,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BB40A4452DBB5E48005826E0 /* Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftKickBoard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBFC9A362DC1C68D0055A450 /* KickBoard+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KickBoard+CoreDataClass.swift"; sourceTree = "<group>"; };
 		BBFC9A372DC1C68D0055A450 /* KickBoard+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KickBoard+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		676B98462DC0DEEB007DEF07 /* Exceptions for "SwiftKickBoard" folder in "Swift" target */ = {
+		676B98462DC0DEEB007DEF07 /* Exceptions for "SwiftKickBoard" folder in "SwiftKickBoard" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = BB40A4442DBB5E48005826E0 /* Swift */;
+			target = BB40A4442DBB5E48005826E0 /* SwiftKickBoard */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -36,7 +36,7 @@
 		BB40A4472DBB5E48005826E0 /* SwiftKickBoard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				676B98462DC0DEEB007DEF07 /* Exceptions for "SwiftKickBoard" folder in "Swift" target */,
+				676B98462DC0DEEB007DEF07 /* Exceptions for "SwiftKickBoard" folder in "SwiftKickBoard" target */,
 			);
 			path = SwiftKickBoard;
 			sourceTree = "<group>";
@@ -80,7 +80,7 @@
 		BB40A4462DBB5E48005826E0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BB40A4452DBB5E48005826E0 /* Swift.app */,
+				BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,9 +88,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BB40A4442DBB5E48005826E0 /* Swift */ = {
+		BB40A4442DBB5E48005826E0 /* SwiftKickBoard */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BB40A4582DBB5E4B005826E0 /* Build configuration list for PBXNativeTarget "Swift" */;
+			buildConfigurationList = BB40A4582DBB5E4B005826E0 /* Build configuration list for PBXNativeTarget "SwiftKickBoard" */;
 			buildPhases = (
 				BB40A4412DBB5E48005826E0 /* Sources */,
 				BB40A4422DBB5E48005826E0 /* Frameworks */,
@@ -103,7 +103,7 @@
 			fileSystemSynchronizedGroups = (
 				BB40A4472DBB5E48005826E0 /* SwiftKickBoard */,
 			);
-			name = Swift;
+			name = SwiftKickBoard;
 			packageProductDependencies = (
 				BB40A4792DBB62EC005826E0 /* SnapKit */,
 				BB5B59CD2DBF5C3300FCE82F /* Alamofire */,
@@ -112,7 +112,7 @@
 				676B998E2DC3D444007DEF07 /* KakaoSDKUser */,
 			);
 			productName = SwiftKickBoard;
-			productReference = BB40A4452DBB5E48005826E0 /* Swift.app */;
+			productReference = BB40A4452DBB5E48005826E0 /* SwiftKickBoard.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -130,7 +130,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BB40A4402DBB5E48005826E0 /* Build configuration list for PBXProject "Swift" */;
+			buildConfigurationList = BB40A4402DBB5E48005826E0 /* Build configuration list for PBXProject "SwiftKickBoard" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -150,7 +150,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BB40A4442DBB5E48005826E0 /* Swift */,
+				BB40A4442DBB5E48005826E0 /* SwiftKickBoard */,
 			);
 		};
 /* End PBXProject section */
@@ -358,7 +358,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BB40A4402DBB5E48005826E0 /* Build configuration list for PBXProject "Swift" */ = {
+		BB40A4402DBB5E48005826E0 /* Build configuration list for PBXProject "SwiftKickBoard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB40A45B2DBB5E4B005826E0 /* Debug */,
@@ -367,7 +367,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB40A4582DBB5E4B005826E0 /* Build configuration list for PBXNativeTarget "Swift" */ = {
+		BB40A4582DBB5E4B005826E0 /* Build configuration list for PBXNativeTarget "SwiftKickBoard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB40A4592DBB5E4B005826E0 /* Debug */,
