@@ -209,9 +209,7 @@ extension LoginViewController {
                     print("카카오톡 로그인 실패 ❌: \(error.localizedDescription)")
                 } else {
                     print("카카오톡 로그인 성공 ✅")
-                    self.idTextField.text = "KakaoLogin"
-                    self.pwTextField.text = "KakaoLogin"
-                    self.loginButtonTapped(self.loginButton)
+                    self.loginForKakao()
                 }
             }
         } else {
@@ -220,10 +218,31 @@ extension LoginViewController {
                     print("카카오 계정 로그인 실패 ❌: \(error.localizedDescription)")
                 } else {
                     print("카카오 계정 로그인 성공 ✅")
-                    self.idTextField.text = "KakaoLogin"
-                    self.pwTextField.text = "KakaoLogin"
-                    self.loginButtonTapped(self.loginButton)
+                    self.loginForKakao()
                 }
+            }
+        }
+    }
+    
+    private func loginForKakao() {
+        
+        if let info = login.login(id: "KakaoLogin", pw: "KakaoLogin") {
+            
+            if autoLoginButton.isSelected {
+                UserDefaults.standard.set(true, forKey: "autoLogin")
+            } else {
+                UserDefaults.standard.set(false, forKey: "autoLogin")
+            }
+            
+            UserDefaults.standard.set(info, forKey: "lastID")
+            
+            let alert = UIAlertController(title: "Kakao Login", message: "로그인 성공!", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                alert.dismiss(animated: true)
+                self.navigationController?.pushViewController(TabBarController(), animated: true)
             }
         }
     }
