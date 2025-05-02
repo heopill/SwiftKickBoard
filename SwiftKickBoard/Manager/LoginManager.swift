@@ -41,19 +41,11 @@ extension LoginManager {
         return nil
     }
     
-    func signUp(name: String, id: String, pw: String, on vc: UIViewController) -> Bool {
+    func signUp(name: String, id: String, pw: String) -> Bool {
         var data = user
         
         for i in data {
             if i[1] == id {
-                let alert = UIAlertController(title: "알림🔔", message: "해당 아이디로 가입된 계정이 있습니다.", preferredStyle: .alert)
-                
-                vc.present(alert, animated: true)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    alert.dismiss(animated: true)
-                }
-                
                 return false
             }
         }
@@ -63,7 +55,7 @@ extension LoginManager {
         return true
     }
     
-    func findID(name: String, on vc: UIViewController) {
+    func findID(name: String) -> String {
         let data = user
         var info = "해당 이름으로 가입된 아이디 ⬇️"
         
@@ -77,13 +69,10 @@ extension LoginManager {
             info = "해당 이름으로 가입된 아이디가 없습니다."
         }
         
-        let alert = UIAlertController(title: "알림🔔", message: info, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
-        
-        vc.present(alert, animated: true)
+        return info
     }
     
-    func findPW(name: String, id: String, on vc: UIViewController) {
+    func findPW(name: String, id: String) -> String {
         let data = user
         var info = ""
         
@@ -98,10 +87,7 @@ extension LoginManager {
             info = "일치하는 정보가 없습니다."
         }
         
-        let alert = UIAlertController(title: "알림🔔", message: info, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "확인", style: .default))
-        
-        vc.present(alert, animated: true)
+        return info
     }
     
 }
