@@ -229,7 +229,16 @@ extension SignUpViewController {
             return
         }
         
-        guard self.login.signUp(name: nameText, id: idText, pw: pwText, on: self) else { return }
+        guard self.login.signUp(name: nameText, id: idText, pw: pwText) else {
+            let alert = UIAlertController(title: "알림🔔", message: "해당 아이디로 가입된 계정이 있습니다.", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                alert.dismiss(animated: true)
+            }
+            return
+        }
         
         let alert = UIAlertController(title: "알림🔔", message: "회원가입을 성공적으로 완료했습니다.", preferredStyle: .alert)
         

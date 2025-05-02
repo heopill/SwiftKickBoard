@@ -133,16 +133,14 @@ class MainViewController: UIViewController, CLLocationManagerDelegate, NMFMapVie
         let gpsButton = UIButton()
         gpsButton.setImage(UIImage(named: "GPS"), for: .normal)
         gpsButton.tintColor = .systemMint
-        gpsButton.translatesAutoresizingMaskIntoConstraints = false
         gpsButton.addTarget(self, action: #selector(gpsButtonTapped), for: .touchUpInside)
         view.addSubview(gpsButton)
-
-        NSLayoutConstraint.activate([
-            gpsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100),
-            gpsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            gpsButton.widthAnchor.constraint(equalToConstant: 60),
-            gpsButton.heightAnchor.constraint(equalToConstant: 60)
-        ])
+        
+        gpsButton.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.bottom.equalToSuperview().inset(135)
+            make.trailing.equalToSuperview().inset(26)
+        }
     }
 
     // 킥보드 상세창

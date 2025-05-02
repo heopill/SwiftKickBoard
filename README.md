@@ -123,13 +123,14 @@
 
 ## 🛠 기술 스택
 
-- **iOS**: 16.6  
-- **Xcode**: 16  
-- **Language**: Swift 5  
-- **UI Framework**: UIKit  
-- **Layout**: SnapKit  
-- **Networking**: Alamofire  
-- **Local Data Persistence**: CoreData, UserDefaults
+- **iOS** : 16.6  
+- **Xcode** : 16  
+- **Language** : Swift 5  
+- **UI Framework** : UIKit  
+- **Layout** : SnapKit
+- **Map API** : Naver Map API 
+- **Networking** : Alamofire  
+- **Local Data Persistence** : CoreData, UserDefaults
 
 <br/>
   
@@ -176,7 +177,14 @@ main                  ← 최종 배포 브랜치
   <img src="https://github.com/user-attachments/assets/eaac6d80-4676-479c-92c3-a3a982753127" width="45%"/>
   <img src="https://github.com/user-attachments/assets/ae97e746-5990-4f90-9d46-936c03e45e9f" width="45%"/>
 </p>
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/268331ca-a60a-4f38-b178-99c5468efd50" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/c45620b5-a964-4fb4-b86e-4a211b7620a3" width="45%"/>
+</p>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/8c6c72c2-0397-4251-85fd-01cde9a0e95e" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/cede1c69-aa5a-425e-918e-5c17e0ccb7c1" width="45%"/>
+</p>
 
 <br/>
 

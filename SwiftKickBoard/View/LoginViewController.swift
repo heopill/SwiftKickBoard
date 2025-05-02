@@ -174,37 +174,6 @@ class LoginViewController: UIViewController {
         return stackView
     }()
     
-    @objc func handleKakaoLogin() {
-        if UserApi.isKakaoTalkLoginAvailable() {
-            UserApi.shared.loginWithKakaoTalk { (oauthToken, error) in
-                if let error = error {
-                    print("카카오톡 로그인 실패 : \(error.localizedDescription)")
-                } else {
-                    print("카카오톡 로그인 성공")
-                    self.navigateToMain()
-                }
-            }
-        } else {
-            UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
-                if let error = error {
-                    print("카카오 계정 로그인 실패 : \(error.localizedDescription)")
-                } else {
-                    print("카카오 계정 로그인 성공")
-                    self.navigateToMain()
-                }
-            }
-        }
-    }
-    private func navigateToMain() {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Kakao Login", message: "로그인 성공!", preferredStyle: .alert)
-            self.present(alert, animated: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-                alert.dismiss(animated: true)
-                self.navigationController?.pushViewController(TabBarController(), animated: true)
-            }
-        }
-    }
 }
 
 extension LoginViewController {
@@ -219,7 +188,7 @@ extension LoginViewController {
                 self.navigationController?.pushViewController(TabBarController(), animated: true)
             }
         }
-        
+        login.signUp(name: "카카오이용자", id: "KakaoLogin", pw: "KakaoLogin")
         setupUI()
     }
     
@@ -232,6 +201,51 @@ extension LoginViewController {
 }
 
 extension LoginViewController {
+    
+    @objc func handleKakaoLogin() {
+        if UserApi.isKakaoTalkLoginAvailable() {
+            UserApi.shared.loginWithKakaoTalk { (oauthToken, error) in
+                if let error = error {
+                    print("카카오톡 로그인 실패 ❌: \(error.localizedDescription)")
+                } else {
+                    print("카카오톡 로그인 성공 ✅")
+                    self.loginForKakao()
+                }
+            }
+        } else {
+            UserApi.shared.loginWithKakaoAccount { (oauthToken, error) in
+                if let error = error {
+                    print("카카오 계정 로그인 실패 ❌: \(error.localizedDescription)")
+                } else {
+                    print("카카오 계정 로그인 성공 ✅")
+                    self.loginForKakao()
+                }
+            }
+        }
+    }
+    
+    private func loginForKakao() {
+        
+        if let info = login.login(id: "KakaoLogin", pw: "KakaoLogin") {
+            
+            if autoLoginButton.isSelected {
+                UserDefaults.standard.set(true, forKey: "autoLogin")
+            } else {
+                UserDefaults.standard.set(false, forKey: "autoLogin")
+            }
+            
+            UserDefaults.standard.set(info, forKey: "lastID")
+            
+            let alert = UIAlertController(title: "Kakao Login", message: "로그인 성공!", preferredStyle: .alert)
+            
+            present(alert, animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+                alert.dismiss(animated: true)
+                self.navigationController?.pushViewController(TabBarController(), animated: true)
+            }
+        }
+    }
     
     private func setupUI() {
         view.backgroundColor = .white
@@ -330,7 +344,10 @@ extension LoginViewController {
             guard let name = nameTextField.text,
             let id = idTextField.text else { return }
             
-            self.login.findPW(name: name, id: id, on: self)
+            let alert = UIAlertController(title: "알림🔔", message: self.login.findPW(name: name, id: id), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default))
+            
+            self.present(alert, animated: true)
         })
         
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
@@ -383,7 +400,10 @@ extension LoginViewController {
             guard let textField = alert.textFields?.first else { return }
             guard let text = textField.text else { return }
             
-            self.login.findID(name: text, on: self)
+            let alert = UIAlertController(title: "알림🔔", message: self.login.findID(name: text), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "확인", style: .default))
+            
+            self.present(alert, animated: true)
         })
         
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
